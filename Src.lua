@@ -176,7 +176,8 @@ function Craft:Init(options)
 		GUI["2"]["Size"] = UDim2.new(0, 400, 0, 300);
 		GUI["2"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
 		GUI["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		GUI["2"]["Name"] = [[Main]];
+		GUI["2"]["Name"] = [[Main]]
+		
 		
 		local dragging = false
 		local dragInput
@@ -320,8 +321,9 @@ function Craft:Init(options)
 		GUI["b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 		GUI["b"]["BackgroundTransparency"] = 1;
 		GUI["b"]["Name"] = [[Exit]];
-		GUI["b"]["Position"] = UDim2.new(1, -6, 0.5, 0);
+		GUI["b"]["Position"] = UDim2.new(1, -6, 0.5, 0)
 
+		
 		GUI["b"].InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				GUI["2"].Visible = false
