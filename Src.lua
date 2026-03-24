@@ -2083,3 +2083,8 @@ function Craft:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 	return Notify
 end
 
+if nil then
+	print("UI is nil")
+	return Craft
+end
+
