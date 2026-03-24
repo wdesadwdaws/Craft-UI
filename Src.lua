@@ -1875,7 +1875,7 @@ function Craft:Init(options)
 				end
 			end)
 
-			function KeyBind:Toggle()
+			function KeyBind:Switch()
 				if KeyBind.Connection then return end
 
 				KeyBind.Connection = uis.InputBegan:Connect(function(input, gpe)
