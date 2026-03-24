@@ -340,7 +340,7 @@ function Craft:Init(options)
 		
 		GUI["b"].InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 then
-				GUI["2"].Visible = false
+				GUI["1"]:Destory()
 			end
 		end)
 		
