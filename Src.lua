@@ -50,6 +50,9 @@ local Icons = {
 	LabelIcon = {
 		Label = "rbxassetid://106063415470342",
 	},
+	MinimiseIcon = {
+		Minimise = "rbxassetid://121714782477610"
+	},
 	NotificationIcon = {
 		Notificaton = nil
 	},
@@ -62,6 +65,7 @@ local Icons = {
 		Info = "rbxassetid://78014970513086",
 		Label = "rbxassetid://106063415470342",
 		Warning = "rbxassetid://117238936381225",
+		Minimise = "rbxassetid://121714782477610",
 		Notificaton = nil,
 	}
 }
@@ -97,6 +101,7 @@ function Craft:Init(options)
 		
 	local GUI = {
 		CurrentTab = nil,
+		ClosedState = false,
 	}
 	
 	local Open = {}
@@ -176,8 +181,7 @@ function Craft:Init(options)
 		GUI["2"]["Size"] = UDim2.new(0, 400, 0, 300);
 		GUI["2"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
 		GUI["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		GUI["2"]["Name"] = [[Main]]
-		
+		GUI["2"]["Name"] = [[Main]];
 		
 		local dragging = false
 		local dragInput
@@ -321,10 +325,26 @@ function Craft:Init(options)
 		GUI["b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 		GUI["b"]["BackgroundTransparency"] = 1;
 		GUI["b"]["Name"] = [[Exit]];
-		GUI["b"]["Position"] = UDim2.new(1, -6, 0.5, 0)
+		GUI["b"]["Position"] = UDim2.new(1, -6, 0.5, 0);
 
+		local Minimise = Instance.new("ImageLabel", GUI["6"])
+		Minimise.AnchorPoint = Vector2.new(1, 0.5)
+		Minimise.BackgroundTransparency = 1
+		Minimise.Size = UDim2.new(0, 18, 0, 18)
+		Minimise.Position = UDim2.new(1, -35, 0.5, 0)
+		Minimise.Image = Icons.DefaultIcon.Minimise
+		Minimise.BorderSizePixel = 0
+		Minimise.Name = "Minimise"
+		Minimise.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		
 		
 		GUI["b"].InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+				GUI["2"].Visible = false
+			end
+		end)
+		
+		Minimise.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				GUI["2"].Visible = false
 				Open["2"].Visible = true
@@ -420,9 +440,10 @@ function Craft:Init(options)
 		GUI["1a"]["Size"] = UDim2.new(0, 1, 1, 0);
 		GUI["1a"]["Position"] = UDim2.new(1, 0, 0, 0);
 		GUI["1a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		GUI["1a"]["Name"] = [[Line]];
-
+		GUI["1a"]["Name"] = [[Line]]
 	end
+	
+		
 	
 	function GUI:CreateTab(options)
 		options = Craft:validate({
@@ -1752,7 +1773,6 @@ function Craft:Init(options)
 		end
 		
 		function Tab:KeyBind(options)
-
 			options = Craft:validate({
 				Text = "KeyBind",
 				Input = nil,
@@ -1854,6 +1874,23 @@ function Craft:Init(options)
 					options.callback(currentKey)
 				end
 			end)
+
+			function KeyBind:Toggle()
+				if KeyBind.Connection then return end
+
+				KeyBind.Connection = uis.InputBegan:Connect(function(input, gpe)
+					if gpe then return end
+
+					if input.KeyCode == currentKey then
+						GUI.ClosedState = not GUI.ClosedState
+						GUI["2"].Visible = not GUI.ClosedState
+
+						if options.callback then
+							options.callback()
+						end
+					end
+				end)
+			end
 
 			return KeyBind
 		end
@@ -2045,4 +2082,16 @@ function Craft:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 	return Notify
 end
 
-return Craft
+local MainUI = Craft:Init()
+
+local MainTab = MainUI:CreateTab()
+
+local Test
+
+Test = MainTab:KeyBind({
+	callback = function()
+		Test:Toggle()
+	end,
+})
+
+Craft:Notify("Created UI", "Loaded", 10)
