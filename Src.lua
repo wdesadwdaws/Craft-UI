@@ -1891,8 +1891,6 @@ function Craft:Init(options)
 					end
 				end)
 			end
-				
-			GUI.ClosedState = false
 			return KeyBind
 		end
 
