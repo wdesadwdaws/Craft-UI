@@ -1,5 +1,5 @@
 --[[
-	@author CreativeGinger
+	Stop looking a source bruh
 ]]
 
 -- Services
