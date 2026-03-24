@@ -2082,16 +2082,4 @@ function Craft:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 	return Notify
 end
 
-local MainUI = Craft:Init()
-
-local MainTab = MainUI:CreateTab()
-
-local Test
-
-Test = MainTab:KeyBind({
-	callback = function()
-		Test:Toggle()
-	end,
-})
-
-Craft:Notify("Created UI", "Loaded", 10)
+return Craft
