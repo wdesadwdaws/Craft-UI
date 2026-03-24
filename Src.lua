@@ -2082,4 +2082,3 @@ function Craft:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 	return Notify
 end
 
-return Craft
