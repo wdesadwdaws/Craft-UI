@@ -1843,7 +1843,7 @@ function Craft:Init(options)
 				KeyBind["7d"]["AnchorPoint"] = Vector2.new(1, 0);
 				KeyBind["7d"]["Size"] = UDim2.new(1, 0, 1, 0);
 				KeyBind["7d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				KeyBind["7d"]["Text"] = [[...]];
+				KeyBind["7d"]["Text"] = options.Text;
 				KeyBind["7d"]["Name"] = [[BindText]];
 				KeyBind["7d"]["Position"] = UDim2.new(1, 0, 0, 0);
 
