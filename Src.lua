@@ -10,6 +10,7 @@ local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 local coreGui = game:GetService("CoreGui")
 local SoundService = game:GetService("SoundService")
+local GuiService = game:GetService("GuiService")
 
 -- Vars
 local lp = Players.LocalPlayer
@@ -17,9 +18,9 @@ local mouse = lp:GetMouse()
 local viewport = workspace.CurrentCamera.ViewportSize
 local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
 
-local Craft = {}
+local Daily = {}
 
-function Craft:tween(object, goal, callback)
+function Daily:tween(object, goal, callback)
 	local tween = TweenService:Create(object, tweenInfo, goal)
 	tween.Completed:Connect(callback or function() end)
 	tween:Play()
@@ -81,7 +82,7 @@ local Sounds = {
 
 
 
-function Craft:validate(defaults, options)	
+function Daily:validate(defaults, options)	
 	for i, v in pairs(defaults) do
 		if options[i] == nil then
 			options[i] = v
@@ -93,17 +94,17 @@ end
 
 
 
-function Craft:Init(options)
-	options = Craft:validate({
-		Title = "Craft UI",
+function Daily:Init(options)
+	options = Daily:validate({
+		Title = "Daily UI",
 		Icon = Icons.DefaultIcon.Exit
 	}, options or  {})
-		
+
 	local GUI = {
 		CurrentTab = nil,
 		ClosedState = false,
 	}
-	
+
 	local Open = {}
 
 	-- Main	
@@ -113,7 +114,7 @@ function Craft:Init(options)
 		Open["1"]["IgnoreGuiInset"] = true;
 		Open["1"].Enabled = false
 		Open["1"]["ScreenInsets"] = Enum.ScreenInsets.DeviceSafeInsets;
-		Open["1"]["Name"] = [[CraftExitUI]];
+		Open["1"]["Name"] = options.Title .. "ExitUI";
 
 		-- StarterGui.CraftExitUI.Main
 		Open["2"] = Instance.new("Frame", Open["1"])
@@ -126,15 +127,15 @@ function Craft:Init(options)
 		Open["2"].BorderColor3 = Color3.fromRGB(0, 0, 0)
 		Open["2"].Name = "Main"
 		Open["2"].ClipsDescendants = true
-		
+
 		Open["2"].InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Open["2"].Visible = false
 				GUI["2"].Visible = true
 			end
 		end)
-		
-		
+
+
 		-- StarterGui.CraftExitUI.Main.UICorner
 		Open["3"] = Instance.new("UICorner", Open["2"]);
 
@@ -166,7 +167,7 @@ function Craft:Init(options)
 		Open["6"]["Text"] = [[Click To Open]];
 		Open["6"]["Name"] = [[Title]];
 		Open["6"]["Position"] = UDim2.new(-2.27778, 0, -1.91667, 0);
-		
+
 		-- StarterGui.CraftGui
 		GUI["1"] = Instance.new("ScreenGui", RunService:IsStudio() and Players.LocalPlayer:WaitForChild("PlayerGui") or coreGui);
 		GUI["1"]["IgnoreGuiInset"] = true;
@@ -182,7 +183,7 @@ function Craft:Init(options)
 		GUI["2"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
 		GUI["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 		GUI["2"]["Name"] = [[Main]];
-		
+
 		local dragging = false
 		local dragInput
 		local dragStart
@@ -336,14 +337,14 @@ function Craft:Init(options)
 		Minimise.BorderSizePixel = 0
 		Minimise.Name = "Minimise"
 		Minimise.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		
-		
+
+
 		GUI["b"].InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				GUI["1"].Enabled = false
 			end
 		end)
-		
+
 		Minimise.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				GUI["2"].Visible = false
@@ -351,7 +352,7 @@ function Craft:Init(options)
 				Open["1"].Enabled = true
 			end
 		end)
-		
+
 		-- StarterGui.CraftGui.Main.TopBar.Line
 		GUI["c"] = Instance.new("Frame", GUI["6"]);
 		GUI["c"]["BorderSizePixel"] = 0;
@@ -361,7 +362,7 @@ function Craft:Init(options)
 		GUI["c"]["Position"] = UDim2.new(0, 0, 1, 0);
 		GUI["c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 		GUI["c"]["Name"] = [[Line]];
-		
+
 		-- StarterGui.CraftGui.Main.ConentContainer
 		GUI["1b"] = Instance.new("Frame", GUI["2"]);
 		GUI["1b"]["BorderSizePixel"] = 0;
@@ -373,7 +374,7 @@ function Craft:Init(options)
 		GUI["1b"]["Name"] = [[ConentContainer]];
 		GUI["1b"]["BackgroundTransparency"] = 1;
 	end
-	
+
 	-- Nav
 	do
 		-- StarterGui.CraftGui.Main.Navigation
@@ -431,7 +432,7 @@ function Craft:Init(options)
 		GUI["13"] = Instance.new("UIListLayout", GUI["11"]);
 		GUI["13"]["Padding"] = UDim.new(0, 1);
 		GUI["13"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
-		
+
 
 		-- StarterGui.CraftGui.Main.Navigation.Line
 		GUI["1a"] = Instance.new("Frame", GUI["d"]);
@@ -442,20 +443,20 @@ function Craft:Init(options)
 		GUI["1a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 		GUI["1a"]["Name"] = [[Line]]
 	end
-	
-		
-	
+
+
+
 	function GUI:CreateTab(options)
-		options = Craft:validate({
-			Title = "Craft Tab",
+		options = Daily:validate({
+			Text = "Daily Tab",
 			Icon = Icons.DefaultIcon.Home
 		}, options or  {})
-		
+
 		local Tab = {
 			Hover = false,
 			Active = false
 		}
-		
+
 		-- Render
 		do
 			-- StarterGui.CraftGui.Main.Navigation.ButtonHolder.Inactive
@@ -469,8 +470,8 @@ function Craft:Init(options)
 			Tab["17"]["BackgroundTransparency"] = 1;
 			Tab["17"]["Size"] = UDim2.new(1, 0, 0, 24);
 			Tab["17"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-			Tab["17"]["Text"] = options.Title;
-			Tab["17"]["Name"] = [[Inactive]];
+			Tab["17"]["Text"] = options.Text;
+			Tab["17"]["Name"] = options.Text;
 
 
 			-- StarterGui.CraftGui.Main.Navigation.ButtonHolder.Inactive.UIPadding
@@ -490,12 +491,12 @@ function Craft:Init(options)
 			Tab["19"]["BackgroundTransparency"] = 1;
 			Tab["19"]["Name"] = [[Icon]];
 			Tab["19"]["Position"] = UDim2.new(0, -24, 0.5, 0);
-			
+
 			-- StarterGui.CraftGui.Main.ConentContainer.HomeTab
 			Tab["1c"] = Instance.new("ScrollingFrame", GUI["1b"]);
 			Tab["1c"]["BorderSizePixel"] = 0;
 			Tab["1c"]["CanvasPosition"] = Vector2.new(0, 0);
-			Tab["1c"]["Name"] = options.Title .. "Tab";
+			Tab["1c"]["Name"] = options.Text .. "Tab";
 			Tab["1c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
 			Tab["1c"]["Selectable"] = false;
 			Tab["1c"]["Size"] = UDim2.new(1, 0, 1, 0);
@@ -503,7 +504,7 @@ function Craft:Init(options)
 			Tab["1c"]["ScrollBarThickness"] = 0;
 			Tab["1c"]["BackgroundTransparency"] = 1;
 			Tab["1c"]["Visible"] = false;
-			
+
 			-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.UIPadding
 			Tab["23"] = Instance.new("UIPadding", Tab["1c"]);
 			Tab["23"]["PaddingTop"] = UDim.new(0, 1);
@@ -518,8 +519,8 @@ function Craft:Init(options)
 			Tab["24"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
 
 		end
-		
-		
+
+
 		-- Methods
 		function Tab:Activate()
 			if not Tab.Active then
@@ -527,9 +528,9 @@ function Craft:Init(options)
 					GUI.CurrentTab:Deactivate()
 				end
 				Tab.Active = true
-				Craft:tween(Tab["17"], {TextColor3 = Color3.fromRGB(255, 255, 255)})
-				Craft:tween(Tab["19"], {ImageColor3 = Color3.fromRGB(255, 255, 255)})
-				Craft:tween(Tab["17"], {BackgroundTransparency = .8})
+				Daily:tween(Tab["17"], {TextColor3 = Color3.fromRGB(255, 255, 255)})
+				Daily:tween(Tab["19"], {ImageColor3 = Color3.fromRGB(255, 255, 255)})
+				Daily:tween(Tab["17"], {BackgroundTransparency = .8})
 				Tab["1c"].Visible = true				
 				GUI.CurrentTab = Tab
 			end
@@ -539,22 +540,22 @@ function Craft:Init(options)
 			if Tab.Active then
 				Tab.Active = false
 				Tab.Hover = false
-				Craft:tween(Tab["17"], {TextColor3 = Color3.fromRGB(200, 200, 200)})
-				Craft:tween(Tab["19"], {ImageColor3 = Color3.fromRGB(200, 200, 200)})
-				Craft:tween(Tab["17"], {BackgroundTransparency = 1})
+				Daily:tween(Tab["17"], {TextColor3 = Color3.fromRGB(200, 200, 200)})
+				Daily:tween(Tab["19"], {ImageColor3 = Color3.fromRGB(200, 200, 200)})
+				Daily:tween(Tab["17"], {BackgroundTransparency = 1})
 				Tab["1c"].Visible = false
 			end
 		end
-		
-		
+
+
 		-- Logic
 		do
 			Tab["17"].MouseEnter:Connect(function()
 				Tab.Hover = true
 
 				if not Tab.Active then
-					Craft:tween(Tab["17"], {TextColor3 = Color3.fromRGB(255, 255, 255)})
-					Craft:tween(Tab["19"], {ImageColor3 = Color3.fromRGB(255, 255, 255)})
+					Daily:tween(Tab["17"], {TextColor3 = Color3.fromRGB(255, 255, 255)})
+					Daily:tween(Tab["19"], {ImageColor3 = Color3.fromRGB(255, 255, 255)})
 				end
 			end)
 
@@ -562,8 +563,8 @@ function Craft:Init(options)
 				Tab.Hover = false
 
 				if not Tab.Active then
-					Craft:tween(Tab["17"], {TextColor3 = Color3.fromRGB(200, 200, 200)})
-					Craft:tween(Tab["19"], {ImageColor3 = Color3.fromRGB(200, 200, 200)})
+					Daily:tween(Tab["17"], {TextColor3 = Color3.fromRGB(200, 200, 200)})
+					Daily:tween(Tab["19"], {ImageColor3 = Color3.fromRGB(200, 200, 200)})
 				end
 			end)
 
@@ -576,24 +577,24 @@ function Craft:Init(options)
 					end
 				end
 			end)
-			
+
 			if GUI.CurrentTab == nil then
 				Tab:Activate()
 			end
 		end
-		
+
 		function Tab:Button(options)
-			options = Craft:validate({
-				Title = "Craft Button",
+			options = Daily:validate({
+				Text = "Daily Button",
 				Icon = Icons.DefaultIcon.Cusor,
 				callback = function() end
 			}, options or  {})
-			
+
 			local Button = {
 				Hover = false,
 				MouseDown = false
 			}
-			
+
 			-- Render
 			do
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Button
@@ -602,7 +603,7 @@ function Craft:Init(options)
 				Button["1d"]["BackgroundColor3"] = Color3.fromRGB(27, 27, 27);
 				Button["1d"]["Size"] = UDim2.new(1, 0, 0, 32);
 				Button["1d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				Button["1d"]["Name"] = [[Button]];
+				Button["1d"]["Name"] = options.Text;
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Button.UICorner
@@ -628,7 +629,7 @@ function Craft:Init(options)
 				Button["20"]["BackgroundTransparency"] = 1;
 				Button["20"]["Size"] = UDim2.new(1, -20, 1, 0);
 				Button["20"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				Button["20"]["Text"] = options.Title;
+				Button["20"]["Text"] = options.Text;
 				Button["20"]["Name"] = [[Title]];
 
 
@@ -652,72 +653,72 @@ function Craft:Init(options)
 				Button["22"]["Name"] = [[Icon]];
 				Button["22"]["Position"] = UDim2.new(1, 0, 0, 0);
 			end
-			
+
 			-- Methods
-			function Button:SetTitle(text)
-				options.Title = text
+			function Button:SetText(text)
+				options.Text = text
 				Button["20"].Text = text
 			end
-			
+
 			function Button:SetCallback(fn)
 				options.callback = fn
 			end
-			
+
 			-- Logic
 			do
 				Button["1d"].MouseEnter:Connect(function()
 					Button.Hover = true
-					
-					Craft:tween(Button["1f"], {Color = Color3.fromRGB(102, 102, 102)})
+
+					Daily:tween(Button["1f"], {Color = Color3.fromRGB(102, 102, 102)})
 				end)
-				
+
 				Button["1d"].MouseLeave:Connect(function()
 					Button.Hover = false
-					
+
 					if not Button.MouseDown then
-						Craft:tween(Button["1f"], {Color = Color3.fromRGB(82, 82, 82)})
+						Daily:tween(Button["1f"], {Color = Color3.fromRGB(82, 82, 82)})
 					end
 				end)
-				
+
 				uis.InputBegan:Connect(function(input, gpe)
 					if gpe then return end
-					
+
 					if input.UserInputType == Enum.UserInputType.MouseButton1 and Button.Hover then
 						Button.MouseDown = true
-						Craft:tween(Button["1d"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
-						Craft:tween(Button["1f"], {Color = Color3.fromRGB(200, 200, 200)})
+						Daily:tween(Button["1d"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
+						Daily:tween(Button["1f"], {Color = Color3.fromRGB(200, 200, 200)})
 						options.callback()
 					end
 				end)
-				
+
 				uis.InputEnded:Connect(function(input, gpe)
 					if gpe then return end
 
 					if input.UserInputType == Enum.UserInputType.MouseButton1 then
 						Button.MouseDown = false
-						
+
 						if Button.Hover then
-							Craft:tween(Button["1d"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(Button["1f"], {Color = Color3.fromRGB(102, 102, 102)})
+							Daily:tween(Button["1d"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(Button["1f"], {Color = Color3.fromRGB(102, 102, 102)})
 						else
-							Craft:tween(Button["1d"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(Button["1f"], {Color = Color3.fromRGB(82, 82, 82)})
+							Daily:tween(Button["1d"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(Button["1f"], {Color = Color3.fromRGB(82, 82, 82)})
 						end
 					end
 				end)
 			end
-			
+
 			return Button
 		end
-		
+
 		function Tab:Warning(options)
-			options = Craft:validate({
-				Text = "Craft Warning",
+			options = Daily:validate({
+				Text = "Daily Warning",
 				Icon = Icons.DefaultIcon.Warning
 			}, options or {})
-			
+
 			local Warning = {}
-			
+
 			-- Render
 			do
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Warning
@@ -726,7 +727,7 @@ function Craft:Init(options)
 				Warning["25"]["BackgroundColor3"] = Color3.fromRGB(153, 153, 31);
 				Warning["25"]["Size"] = UDim2.new(1, 0, 0, 26);
 				Warning["25"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				Warning["25"]["Name"] = [[Warning]];
+				Warning["25"]["Name"] = options.Text
 				Warning["25"]["BackgroundTransparency"] = 0.3;
 
 
@@ -781,16 +782,16 @@ function Craft:Init(options)
 				Warning["2a"]["Name"] = [[Icon]];
 				Warning["2a"]["Position"] = UDim2.new(0, 20, 0, -2);
 			end
-			
+
 			-- Methods
 			function Warning:SetText(text)
 				options.Text = text
 				Warning:_update()
 			end
-			
+
 			function Warning:_update()
 				Warning["28"].Text = options.Text
-				
+
 				task.wait()
 
 				Warning["28"].Size = UDim2.new(Warning["28"].Size.X.Scale, Warning["28"].Size.X.Offset, 0, math.huge)
@@ -802,21 +803,21 @@ function Craft:Init(options)
 
 				Warning["28"].Size = UDim2.new(Warning["28"].Size.X.Scale, Warning["28"].Size.X.Offset, 0, Warning["28"].TextBounds.Y)
 				Warning["25"].Size = UDim2.new(Warning["25"].Size.X.Scale, Warning["25"].Size.X.Offset, 0, Warning["28"].TextBounds.Y + 12)
-				Craft:tween(Warning["25"], {Size = UDim2.new(Warning["25"].Size.X.Scale, Warning["25"].Size.X.Offset, 0, Warning["28"].TextBounds.Y + 12)})
+				Daily:tween(Warning["25"], {Size = UDim2.new(Warning["25"].Size.X.Scale, Warning["25"].Size.X.Offset, 0, Warning["28"].TextBounds.Y + 12)})
 			end
-			
+
 			Warning:_update()
 			return Warning
 		end
-		
+
 		function Tab:Info(options)
-			options = Craft:validate({
-				Text = "Crat Info",
+			options = Daily:validate({
+				Text = "Daily Info",
 				Icon = Icons.DefaultIcon.Info
 			}, options or {})
-			
+
 			local Info = {}
-			
+
 			-- Render
 			do
 
@@ -826,7 +827,7 @@ function Craft:Init(options)
 				Info["2b"]["BackgroundColor3"] = Color3.fromRGB(71, 176, 166);
 				Info["2b"]["Size"] = UDim2.new(1, 0, 0, 26);
 				Info["2b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				Info["2b"]["Name"] = [[Info]];
+				Info["2b"]["Name"] = options.Text
 				Info["2b"]["BackgroundTransparency"] = 0.3;
 
 
@@ -879,7 +880,7 @@ function Craft:Init(options)
 				Info["30"]["Name"] = [[Icon]];
 				Info["30"]["Position"] = UDim2.new(0, 20, 0, -2);
 			end
-			
+
 			-- Methods
 			function Info:SetText(text)
 				options.Text = text
@@ -900,21 +901,21 @@ function Craft:Init(options)
 
 				Info["2e"].Size = UDim2.new(Info["2e"].Size.X.Scale, Info["2e"].Size.X.Offset, 0, Info["2e"].TextBounds.Y)
 				Info["2b"].Size = UDim2.new(Info["2b"].Size.X.Scale, Info["2b"].Size.X.Offset, 0, Info["2e"].TextBounds.Y + 12)
-				Craft:tween(Info["2b"], {Size = UDim2.new(Info["2b"].Size.X.Scale, Info["2b"].Size.X.Offset, 0, Info["2e"].TextBounds.Y + 12)})
+				Daily:tween(Info["2b"], {Size = UDim2.new(Info["2b"].Size.X.Scale, Info["2b"].Size.X.Offset, 0, Info["2e"].TextBounds.Y + 12)})
 			end
-			
+
 			Info:_update()
 			return Info
 		end
-		
+
 		function Tab:Label(options)
-			options = Craft:validate({
-				Text = "Crat Label",
+			options = Daily:validate({
+				Text = "Daily Label",
 				Icon = Icons.DefaultIcon.Label
 			}, options or {})
 
 			local Label = {}
-			
+
 			-- Render
 			do
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Label
@@ -923,7 +924,7 @@ function Craft:Init(options)
 				Label["31"]["BackgroundColor3"] = Color3.fromRGB(27, 27, 27);
 				Label["31"]["Size"] = UDim2.new(1, 0, 0, 26);
 				Label["31"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				Label["31"]["Name"] = [[Label]];
+				Label["31"]["Name"] = options.Text
 				Label["31"]["BackgroundTransparency"] = 0.3;
 
 
@@ -976,7 +977,7 @@ function Craft:Init(options)
 				Label["36"]["Position"] = UDim2.new(0, 20, 0, -2);
 
 			end
-			
+
 			-- Methods
 			function Label:SetText(text)
 				options.Text = text
@@ -997,26 +998,26 @@ function Craft:Init(options)
 
 				Label["34"].Size = UDim2.new(Label["34"].Size.X.Scale, Label["34"].Size.X.Offset, 0, Label["34"].TextBounds.Y)
 				Label["31"].Size = UDim2.new(Label["31"].Size.X.Scale, Label["31"].Size.X.Offset, 0, Label["34"].TextBounds.Y + 12)
-				Craft:tween(Label["31"], {Size = UDim2.new(Label["31"].Size.X.Scale, Label["31"].Size.X.Offset, 0, Label["34"].TextBounds.Y + 12)})
+				Daily:tween(Label["31"], {Size = UDim2.new(Label["31"].Size.X.Scale, Label["31"].Size.X.Offset, 0, Label["34"].TextBounds.Y + 12)})
 			end
-			
+
 			Label:_update()
 			return Label
 		end
-		
+
 		function Tab:Toggle(options)
-			options = Craft:validate({
-				Text = "Craft Toggle",
+			options = Daily:validate({
+				Text = "Daily Toggle",
 				Icon = Icons.DefaultIcon.Toggle,
 				callback = function() end
 			}, options or {})
-			
+
 			local Toggle = {
 				Hover = false,
 				MouseDown = false,
 				State = false,
 			}
-			
+
 			-- Render
 			do
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.ToggleInactive
@@ -1025,7 +1026,7 @@ function Craft:Init(options)
 				Toggle["53"]["BackgroundColor3"] = Color3.fromRGB(27, 27, 27);
 				Toggle["53"]["Size"] = UDim2.new(1, 0, 0, 32);
 				Toggle["53"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				Toggle["53"]["Name"] = [[ToggleInactive]];
+				Toggle["53"]["Name"] = options.Text
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.ToggleInactive.UICorner
@@ -1098,7 +1099,7 @@ function Craft:Init(options)
 				Toggle["5b"]["Name"] = [[Checkmark]];
 				Toggle["5b"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
 			end
-			
+
 			-- Methods
 			do
 				function Toggle:Toggle(b)
@@ -1107,32 +1108,32 @@ function Craft:Init(options)
 					else
 						Toggle.State = b
 					end
-					
+
 					if Toggle.State then
-						Craft:tween(Toggle["58"], {BackgroundColor3 = Color3.fromRGB(115, 191, 92)})
-						Craft:tween(Toggle["5b"], {ImageTransparency = 0})
+						Daily:tween(Toggle["58"], {BackgroundColor3 = Color3.fromRGB(115, 191, 92)})
+						Daily:tween(Toggle["5b"], {ImageTransparency = 0})
 					else
-						Craft:tween(Toggle["58"], {BackgroundColor3 = Color3.fromRGB(64, 64, 64)})
-						Craft:tween(Toggle["5b"], {ImageTransparency = 1})
+						Daily:tween(Toggle["58"], {BackgroundColor3 = Color3.fromRGB(64, 64, 64)})
+						Daily:tween(Toggle["5b"], {ImageTransparency = 1})
 					end
-					
+
 					options.callback(Toggle.State)
 				end
 			end
-			
+
 			-- Logic
 			do
 				Toggle["53"].InputBegan:Connect(function()
 					Toggle.Hover = true
 
-					Craft:tween(Toggle["55"], {Color = Color3.fromRGB(102, 102, 102)})
+					Daily:tween(Toggle["55"], {Color = Color3.fromRGB(102, 102, 102)})
 				end)
 
 				Toggle["53"].MouseLeave:Connect(function()
 					Toggle.Hover = false
 
 					if not Toggle.MouseDown then
-						Craft:tween(Toggle["55"], {Color = Color3.fromRGB(82, 82, 82)})
+						Daily:tween(Toggle["55"], {Color = Color3.fromRGB(82, 82, 82)})
 					end
 				end)
 
@@ -1141,8 +1142,8 @@ function Craft:Init(options)
 
 					if input.UserInputType == Enum.UserInputType.MouseButton1 and Toggle.Hover then
 						Toggle.MouseDown = true
-						Craft:tween(Toggle["53"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
-						Craft:tween(Toggle["55"], {Color = Color3.fromRGB(200, 200, 200)})
+						Daily:tween(Toggle["53"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
+						Daily:tween(Toggle["55"], {Color = Color3.fromRGB(200, 200, 200)})
 						Toggle:Toggle()
 					end
 				end)
@@ -1154,36 +1155,36 @@ function Craft:Init(options)
 						Toggle.MouseDown = false
 
 						if Toggle.Hover then
-							Craft:tween(Toggle["53"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(Toggle["55"], {Color = Color3.fromRGB(102, 102, 102)})
+							Daily:tween(Toggle["53"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(Toggle["55"], {Color = Color3.fromRGB(102, 102, 102)})
 						else
-							Craft:tween(Toggle["53"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(Toggle["55"], {Color = Color3.fromRGB(82, 82, 82)})
+							Daily:tween(Toggle["53"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(Toggle["55"], {Color = Color3.fromRGB(82, 82, 82)})
 						end
 					end
 				end)
 			end
-			
-			
+
+
 			return Toggle
 		end
-		
+
 		function Tab:Slider(options)
-			options = Craft:validate({
-				Text = "Craft Slider",
+			options = Daily:validate({
+				Text = "Daily Slider",
 				Min = 0,
 				Max = 100,
 				default = 50,
 				callback = function(v) print(v) end
 			}, options or {})
-			
+
 			local Slider = {
 				MouseDown = false,
 				Hover = false,
 				Connection = nil,
 				Options = options
 			}
-			
+
 			-- Render
 			do
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Slider
@@ -1192,7 +1193,7 @@ function Craft:Init(options)
 				Slider["37"]["BackgroundColor3"] = Color3.fromRGB(27, 27, 27);
 				Slider["37"]["Size"] = UDim2.new(1, 0, 0, 38);
 				Slider["37"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				Slider["37"]["Name"] = [[Slider]];
+				Slider["37"]["Name"] = options.Text
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Slider.UICorner
@@ -1283,7 +1284,7 @@ function Craft:Init(options)
 				Slider["41"] = Instance.new("UICorner", Slider["40"]);
 				Slider["41"]["CornerRadius"] = UDim.new(0, 4);
 			end
-			
+
 			-- Methods
 			function Slider:SetValue(v)
 				if v == nil then
@@ -1292,35 +1293,35 @@ function Craft:Init(options)
 
 					Slider["3c"].Text = tostring(value)
 					Slider["40"].Size = UDim2.fromScale(percentage, 1)
-					
+
 				else
 					Slider["3c"].Text = tostring(v)
 					Slider["40"].Size = UDim2.fromScale(((v - options.Min) / (options.Max - options.Min)), 1)
 				end
 				options.callback(Slider:GetValue())
 			end
-			
+
 			function Slider:GetValue()
 				return tostring(Slider["3c"].Text)
 			end
-			
+
 			-- Logic
 			do
 				Slider["37"].InputBegan:Connect(function()
 					Slider.Hover = true
 
-					Craft:tween(Slider["39"], {Color = Color3.fromRGB(102, 102, 102)})
-					Craft:tween(Slider["3f"], {Color = Color3.fromRGB(102, 102, 102)})
-					Craft:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(102, 102, 102)})
+					Daily:tween(Slider["39"], {Color = Color3.fromRGB(102, 102, 102)})
+					Daily:tween(Slider["3f"], {Color = Color3.fromRGB(102, 102, 102)})
+					Daily:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(102, 102, 102)})
 				end)
 
 				Slider["37"].MouseLeave:Connect(function()
 					Slider.Hover = false
 
 					if not Slider.MouseDown then
-						Craft:tween(Slider["39"], {Color = Color3.fromRGB(82, 82, 82)})
-						Craft:tween(Slider["3f"], {Color = Color3.fromRGB(82, 82, 82)})
-						Craft:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(82, 82, 82)})
+						Daily:tween(Slider["39"], {Color = Color3.fromRGB(82, 82, 82)})
+						Daily:tween(Slider["3f"], {Color = Color3.fromRGB(82, 82, 82)})
+						Daily:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(82, 82, 82)})
 					end
 				end)
 
@@ -1329,12 +1330,12 @@ function Craft:Init(options)
 
 					if input.UserInputType == Enum.UserInputType.MouseButton1 and Slider.Hover then
 						Slider.MouseDown = true
-						Craft:tween(Slider["37"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
-						Craft:tween(Slider["39"], {Color = Color3.fromRGB(200, 200, 200)})
-						Craft:tween(Slider["3f"], {Color = Color3.fromRGB(200, 200, 200)})
-						Craft:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(200, 200, 200)})
-						
-						
+						Daily:tween(Slider["37"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
+						Daily:tween(Slider["39"], {Color = Color3.fromRGB(200, 200, 200)})
+						Daily:tween(Slider["3f"], {Color = Color3.fromRGB(200, 200, 200)})
+						Daily:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(200, 200, 200)})
+
+
 						if not Slider.Connection then
 							Slider.Connection = RunService.RenderStepped:Connect(function()
 								Slider:SetValue()
@@ -1350,36 +1351,36 @@ function Craft:Init(options)
 						Slider.MouseDown = false
 
 						if Slider.Hover then
-							Craft:tween(Slider["37"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(Slider["39"], {Color = Color3.fromRGB(102, 102, 102)})
-							Craft:tween(Slider["3f"], {Color = Color3.fromRGB(102, 102, 102)})
-							Craft:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(102, 102, 102)})
+							Daily:tween(Slider["37"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(Slider["39"], {Color = Color3.fromRGB(102, 102, 102)})
+							Daily:tween(Slider["3f"], {Color = Color3.fromRGB(102, 102, 102)})
+							Daily:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(102, 102, 102)})
 						else
-							Craft:tween(Slider["37"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(Slider["39"], {Color = Color3.fromRGB(82, 82, 82)})
-							Craft:tween(Slider["3f"], {Color = Color3.fromRGB(82, 82, 82)})
-							Craft:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(82, 82, 82)})
+							Daily:tween(Slider["37"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(Slider["39"], {Color = Color3.fromRGB(82, 82, 82)})
+							Daily:tween(Slider["3f"], {Color = Color3.fromRGB(82, 82, 82)})
+							Daily:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(82, 82, 82)})
 						end
-						
+
 						if Slider.Connection then Slider.Connection:Disconnect() end
 						Slider.Connection = nil
 					end
 				end)
 			end
-			
-			
-			
+
+
+
 			return Slider
 		end
-			
+
 		function Tab:Dropdown(options)
-			options = Craft:validate({
-				Text = "Craft Dropdown",
+			options = Daily:validate({
+				Text = "Daily Dropdown",
 				Icon = Icons.DefaultIcon.Down,
 				items = {},
 				callback = function() end
 			}, options or {})
-			
+
 			local DropDown = {
 				Items = {
 					["id"] = {	
@@ -1392,7 +1393,7 @@ function Craft:Init(options)
 				Hover = false,
 				HoveringItem = false
 			}
-			
+
 			-- Render
 			do
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Dropdown
@@ -1402,7 +1403,7 @@ function Craft:Init(options)
 				DropDown["42"]["ClipsDescendants"] = true;
 				DropDown["42"]["Size"] = UDim2.new(1, 0, 0, 30);
 				DropDown["42"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				DropDown["42"]["Name"] = [[Dropdown]];
+				DropDown["42"]["Name"] = options.Text
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Dropdown.UICorner
@@ -1470,14 +1471,14 @@ function Craft:Init(options)
 				DropDown["49"]["Padding"] = UDim.new(0, 4);
 				DropDown["49"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
 			end
-			
+
 			-- Methods
 			function DropDown:Add(id, value)
 				local Item = {
 					Hover = false,
 					MouseDown = false
 				}
-				
+
 				if DropDown.Items[id] ~= nil then 
 					warn("Dropdown already has item with id: " .. id)
 					return 
@@ -1508,14 +1509,14 @@ function Craft:Init(options)
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Dropdown.OptionHolder.Inactive Option.UICorner
 				DropDown.Items[id].instance["4c"] = Instance.new("UICorner", DropDown.Items[id].instance["4a"])
 				DropDown.Items[id].instance["4c"].CornerRadius = UDim.new(0, 2)
-				
+
 				DropDown.Items[id].instance["4a"].MouseEnter:Connect(function()
 					Item.Hover = true
 					DropDown.HoveringItem = true
-					
+
 					if Item.Hover then
-						Craft:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(102, 102, 102)})
-						Craft:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(82, 82, 82)})
+						Daily:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(102, 102, 102)})
+						Daily:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(82, 82, 82)})
 					end
 				end)
 
@@ -1523,8 +1524,8 @@ function Craft:Init(options)
 					DropDown.HoveringItem = false
 					Item.Hover = false
 					if not Item.MouseDown then
-						Craft:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(82, 82, 82)})
-						Craft:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+						Daily:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(82, 82, 82)})
+						Daily:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
 					end
 				end)
 
@@ -1536,39 +1537,39 @@ function Craft:Init(options)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 and Item.Hover then
 						Item.MouseDown = true
 						DropDown.HoveringItem = true
-						Craft:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(102, 102, 102)})
-						Craft:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(102, 102, 102)})
+						Daily:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(102, 102, 102)})
+						Daily:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(102, 102, 102)})
 						options.callback(value)
 					end
 				end)
 
 				uis.InputEnded:Connect(function(input, gpe)
 					if gpe then return end
-					
+
 					if DropDown.Items[id] == nil then return end
 
 					if input.UserInputType == Enum.UserInputType.MouseButton1 then
 						Item.MouseDown = false
 						if Item.Hover then
-							Craft:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(102, 102, 102)})
+							Daily:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(102, 102, 102)})
 						else
-							Craft:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(82, 82, 82)})
+							Daily:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(82, 82, 82)})
 						end
 					end
 				end)
 			end
-			
+
 			function DropDown:Remove(id)
 				if DropDown.Items[id] ~= nil then
 					if DropDown.Items[id].instance ~= nil then
 
 						if DropDown.Open then
 							DropDown["48"].Visible = false
-							Craft:tween(DropDown["42"], {Size = UDim2.new(1, 0, 0, 1)})
+							Daily:tween(DropDown["42"], {Size = UDim2.new(1, 0, 0, 1)})
 							task.wait(0.1)
-							Craft:tween(DropDown["42"], {Size = UDim2.new(1, 0, 0, 30)})
+							Daily:tween(DropDown["42"], {Size = UDim2.new(1, 0, 0, 30)})
 						end
 
 						for i, v in pairs(DropDown.Items[id].instance) do
@@ -1592,7 +1593,7 @@ function Craft:Init(options)
 
 			function DropDown:Toggle()
 				if DropDown.Open then
-					Craft:tween(DropDown["42"], {Size = UDim2.new(1, 0, 0, 30)}, function()
+					Daily:tween(DropDown["42"], {Size = UDim2.new(1, 0, 0, 30)}, function()
 						DropDown["48"].Visible = false
 					end)
 				else
@@ -1604,26 +1605,26 @@ function Craft:Init(options)
 					end
 
 					DropDown["48"].Visible = true
-					Craft:tween(DropDown["42"], {Size = UDim2.new(1, 0, 0, 30 + (count * 16) + 1)})
+					Daily:tween(DropDown["42"], {Size = UDim2.new(1, 0, 0, 30 + (count * 16) + 1)})
 				end
 				DropDown.Open = not DropDown.Open
 			end
 
-				
-			
+
+
 			-- Logic
 			do
 				DropDown["42"].MouseEnter:Connect(function()
 					DropDown.Hover = true
 
-					Craft:tween(DropDown["44"], {Color = Color3.fromRGB(200, 200, 200)})
+					Daily:tween(DropDown["44"], {Color = Color3.fromRGB(200, 200, 200)})
 				end)
 
 				DropDown["42"].MouseLeave:Connect(function()
 					DropDown.Hover = false
 
 					if not DropDown.MouseDown then
-						Craft:tween(DropDown["44"], {Color = Color3.fromRGB(82, 82, 82)})
+						Daily:tween(DropDown["44"], {Color = Color3.fromRGB(82, 82, 82)})
 					end
 				end)
 
@@ -1632,8 +1633,8 @@ function Craft:Init(options)
 
 					if input.UserInputType == Enum.UserInputType.MouseButton1 and DropDown.Hover then
 						DropDown.MouseDown = true
-						Craft:tween(DropDown["42"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
-						Craft:tween(DropDown["44"], {Color = Color3.fromRGB(200, 200, 200)})
+						Daily:tween(DropDown["42"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
+						Daily:tween(DropDown["44"], {Color = Color3.fromRGB(200, 200, 200)})
 						if not DropDown.HoveringItem then
 							DropDown:Toggle()
 						end
@@ -1647,24 +1648,24 @@ function Craft:Init(options)
 						DropDown.MouseDown = false
 
 						if DropDown.Hover then
-							Craft:tween(DropDown["42"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(DropDown["44"], {Color = Color3.fromRGB(200, 200, 200)})
+							Daily:tween(DropDown["42"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(DropDown["44"], {Color = Color3.fromRGB(200, 200, 200)})
 						else
-							Craft:tween(DropDown["42"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
-							Craft:tween(DropDown["44"], {Color = Color3.fromRGB(82, 82, 82)})
+							Daily:tween(DropDown["42"], {BackgroundColor3 = Color3.fromRGB(27, 27, 27)})
+							Daily:tween(DropDown["44"], {Color = Color3.fromRGB(82, 82, 82)})
 						end
 					end
 				end)
 			end
-			
+
 			DropDown.CanClose = true
-			
+
 			return DropDown
 		end
-		
+
 		function Tab:TextBox(options)
-			options = Craft:validate({
-				Text = "Textbox",
+			options = Daily:validate({
+				Text = "Daily Textbox",
 				EmptyText = "Click to enter text",
 				callback = function() end
 			}, options or {})
@@ -1679,7 +1680,7 @@ function Craft:Init(options)
 				TextBox["60"]["BackgroundColor3"] = Color3.fromRGB(28, 28, 28);
 				TextBox["60"]["Size"] = UDim2.new(1, 0, 0, 38);
 				TextBox["60"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				TextBox["60"]["Name"] = [[TextBox]];
+				TextBox["60"]["Name"] = options.Text
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.MainTab.TextBox.UICorner
@@ -1771,15 +1772,13 @@ function Craft:Init(options)
 
 			return TextBox
 		end
-		
+
 		function Tab:KeyBind(options)
-			options = Craft:validate({
-				Text = "KeyBind",
+			options = Daily:validate({
+				Text = "Daily KeyBind",
 				Input = nil,
 				callback = function() end
 			}, options or {})
-
-			local uis = game:GetService("UserInputService")
 
 			local KeyBind = {}
 			local waiting = false
@@ -1787,27 +1786,27 @@ function Craft:Init(options)
 
 			do
 				-- StarterGui.CraftGui.Main.ConentContainer.MainTab.KeyBind
-				KeyBind["72"] = Instance.new("Frame", Tab["1c"]);
-				KeyBind["72"]["BorderSizePixel"] = 0;
-				KeyBind["72"]["BackgroundColor3"] = Color3.fromRGB(28, 28, 28);
-				KeyBind["72"]["Size"] = UDim2.new(1, 0, 0, 38);
-				KeyBind["72"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-				KeyBind["72"]["Name"] = [[KeyBind]];
+				KeyBind["69"] = Instance.new("Frame", Tab["1c"]);
+				KeyBind["69"]["BorderSizePixel"] = 0;
+				KeyBind["69"]["BackgroundColor3"] = Color3.fromRGB(28, 28, 28);
+				KeyBind["69"]["Size"] = UDim2.new(1, 0, 0, 38);
+				KeyBind["69"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+				KeyBind["69"]["Name"] = options.Text
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.MainTab.KeyBind.UICorner
-				KeyBind["73"] = Instance.new("UICorner", KeyBind["72"]);
-				KeyBind["73"]["CornerRadius"] = UDim.new(0, 4);
+				KeyBind["70"] = Instance.new("UICorner", KeyBind["69"]);
+				KeyBind["70"]["CornerRadius"] = UDim.new(0, 4);
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.MainTab.KeyBind.UIStroke
-				KeyBind["7a"] = Instance.new("UIStroke", KeyBind["72"]);
+				KeyBind["7a"] = Instance.new("UIStroke", KeyBind["69"]);
 				KeyBind["7a"]["Color"] = Color3.fromRGB(83, 83, 83);
 				KeyBind["7a"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.MainTab.KeyBind.Title
-				KeyBind["7b"] = Instance.new("TextLabel", KeyBind["72"]);
+				KeyBind["7b"] = Instance.new("TextLabel", KeyBind["60"]);
 				KeyBind["7b"]["TextWrapped"] = true;
 				KeyBind["7b"]["BorderSizePixel"] = 0;
 				KeyBind["7b"]["TextSize"] = 14;
@@ -1823,7 +1822,7 @@ function Craft:Init(options)
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.MainTab.KeyBind.UIPadding
-				KeyBind["7c"] = Instance.new("UIPadding", KeyBind["72"]);
+				KeyBind["7c"] = Instance.new("UIPadding", KeyBind["60"]);
 				KeyBind["7c"]["PaddingTop"] = UDim.new(0, 6);
 				KeyBind["7c"]["PaddingRight"] = UDim.new(0, 6);
 				KeyBind["7c"]["PaddingLeft"] = UDim.new(0, 6);
@@ -1831,7 +1830,7 @@ function Craft:Init(options)
 
 
 				-- StarterGui.CraftGui.Main.ConentContainer.MainTab.KeyBind.BindText
-				KeyBind["7d"] = Instance.new("TextLabel", KeyBind["72"]);
+				KeyBind["7d"] = Instance.new("TextLabel", KeyBind["69"]);
 				KeyBind["7d"]["TextWrapped"] = true;
 				KeyBind["7d"]["BorderSizePixel"] = 0;
 				KeyBind["7d"]["TextSize"] = 14;
@@ -1853,7 +1852,7 @@ function Craft:Init(options)
 				KeyBind["7d"].Text = currentKey.Name
 			end
 
-			KeyBind["72"].InputBegan:Connect(function(input)
+			KeyBind["69"].InputBegan:Connect(function(input)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 then
 					waiting = true
 					KeyBind["7d"].Text = "..."
@@ -1893,14 +1892,17 @@ function Craft:Init(options)
 			end
 			return KeyBind
 		end
-
+		
+		
+			
+			
 		return Tab
 	end
-	
+
 	return GUI
 end
 
-function Craft:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
+function Daily:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 	local options
 
 	if typeof(firstArg) == "table" then
@@ -2057,18 +2059,18 @@ function Craft:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 		Notify["12"]:Play()
 		game:GetService("Debris"):AddItem(Notify["12"], 6)
 
-		Craft:tween(Notify["2"], {
+		Daily:tween(Notify["2"], {
 			Position = UDim2.new(1, -10, 1, -10),
 			BackgroundTransparency = 0.6
 		})
-		Craft:tween(Notify["4"], {TextTransparency = 0})
-		Craft:tween(Notify["6"], {TextTransparency = 0})
+		Daily:tween(Notify["4"], {TextTransparency = 0})
+		Daily:tween(Notify["6"], {TextTransparency = 0})
 
 		task.delay(Time, function()
-			Craft:tween(Notify["2"], {BackgroundTransparency = 1})
+			Daily:tween(Notify["2"], {BackgroundTransparency = 1})
 			task.delay(0.4, function()
-				Craft:tween(Notify["4"], {TextTransparency = 1})
-				Craft:tween(Notify["6"], {TextTransparency = 1})
+				Daily:tween(Notify["4"], {TextTransparency = 1})
+				Daily:tween(Notify["6"], {TextTransparency = 1})
 			end)
 			task.delay(1, function()
 				if Notify["1"] and Notify["1"].Parent then
@@ -2077,9 +2079,9 @@ function Craft:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 			end)
 		end)
 	end
-	
+
 	return Notify
 end
 
-return Craft
 
+return Daily
