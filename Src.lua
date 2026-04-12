@@ -375,6 +375,10 @@ function Daily:Init(options)
 		GUI["1b"]["BackgroundTransparency"] = 1;
 	end
 
+	function GUI:Destroy()
+		GUI["1"]:Destroy()
+	end
+
 	-- Nav
 	do
 		-- StarterGui.CraftGui.Main.Navigation
