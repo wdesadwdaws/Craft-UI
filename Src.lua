@@ -2014,7 +2014,7 @@ function Daily:Init(options)
 		Popup["7g"].InputBegan:Connect(function(input, gpe)
 			if gpe then return end
 			
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Popup["71"].Visible = false
 			end
 		end)
@@ -2022,7 +2022,7 @@ function Daily:Init(options)
 		Popup["7h"].InputBegan:Connect(function(input, gpe)
 			if gpe then return end
 
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Popup["71"].Visible = false
 			end
 		end)
