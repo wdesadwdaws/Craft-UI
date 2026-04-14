@@ -125,13 +125,11 @@ function Daily:Init(options)
 		Open["2"].ClipsDescendants = true
 
 		Open["2"].InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				Open["2"].Visible = false
 				GUI["2"].Visible = true
 			end
 		end)
-
-
 		-- StarterGui.CraftExitUI.Main.UICorner
 		Open["3"] = Instance.new("UICorner", Open["2"]);
 
@@ -198,12 +196,11 @@ function Daily:Init(options)
 		end
 
 		GUI["2"].InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				dragStart = input.Position
 				startPos = GUI["2"].Position
 				moved = false
 				dragging = false
-
 				input.Changed:Connect(function()
 					if input.UserInputState == Enum.UserInputState.End then
 						dragging = false
@@ -217,7 +214,7 @@ function Daily:Init(options)
 		end)
 
 		GUI["2"].InputChanged:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseMovement then
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 				if not dragStart then return end
 
 				local delta = (input.Position - dragStart).Magnitude
@@ -234,7 +231,6 @@ function Daily:Init(options)
 				updateDrag(input, GUI["2"])
 			end
 		end)
-		
 		-- StarterGui.Daily UI.Main.UIGradient
 		local MainGradient = Instance.new("UIGradient", GUI["2"]);
 		MainGradient.Transparency = NumberSequence.new{NumberSequenceKeypoint.new(0.000, 0.3),NumberSequenceKeypoint.new(1.000, 0.3)};
@@ -343,13 +339,13 @@ function Daily:Init(options)
 
 
 		GUI["b"].InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				GUI["1"].Enabled = false
 			end
 		end)
 
 		Minimise.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				GUI["2"].Visible = false
 				Open["2"].Visible = true
 				Open["1"].Enabled = true
@@ -575,15 +571,13 @@ function Daily:Init(options)
 				end
 			end)
 
-			uis.InputBegan:Connect(function(input, gpe)
-				if gpe then return end
-
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					if Tab.Hover then
-						Tab:Activate()
-					end
+			uis.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				if Tab.Hover then
+					Tab:Activate()
 				end
-			end)
+			end
+		end)
 
 			if GUI.CurrentTab == nil then
 				Tab:Activate()
@@ -690,7 +684,7 @@ function Daily:Init(options)
 				uis.InputBegan:Connect(function(input, gpe)
 					if gpe then return end
 
-					if input.UserInputType == Enum.UserInputType.MouseButton1 and Button.Hover then
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch and Button.Hover then
 						Button.MouseDown = true
 						Daily:tween(Button["1d"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
 						Daily:tween(Button["1f"], {Color = Color3.fromRGB(200, 200, 200)})
@@ -1130,7 +1124,7 @@ function Daily:Init(options)
 
 			-- Logic
 			do
-				Toggle["53"].InputBegan:Connect(function()
+				Toggle["53"].MouseEnter:Connect(function()
 					Toggle.Hover = true
 
 					Daily:tween(Toggle["55"], {Color = Color3.fromRGB(102, 102, 102)})
@@ -1147,7 +1141,7 @@ function Daily:Init(options)
 				uis.InputBegan:Connect(function(input, gpe)
 					if gpe then return end
 
-					if input.UserInputType == Enum.UserInputType.MouseButton1 and Toggle.Hover then
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch and Toggle.Hover then
 						Toggle.MouseDown = true
 						Daily:tween(Toggle["53"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
 						Daily:tween(Toggle["55"], {Color = Color3.fromRGB(200, 200, 200)})
@@ -1314,7 +1308,7 @@ function Daily:Init(options)
 
 			-- Logic
 			do
-				Slider["37"].InputBegan:Connect(function()
+				Slider["37"].MouseEnter:Connect(function()
 					Slider.Hover = true
 
 					Daily:tween(Slider["39"], {Color = Color3.fromRGB(102, 102, 102)})
@@ -1335,7 +1329,7 @@ function Daily:Init(options)
 				uis.InputBegan:Connect(function(input, gpe)
 					if gpe then return end
 
-					if input.UserInputType == Enum.UserInputType.MouseButton1 and Slider.Hover then
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch and Slider.Hover then
 						Slider.MouseDown = true
 						Daily:tween(Slider["37"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
 						Daily:tween(Slider["39"], {Color = Color3.fromRGB(200, 200, 200)})
@@ -1541,7 +1535,7 @@ function Daily:Init(options)
 
 					if DropDown.Items[id] == nil then return end
 
-					if input.UserInputType == Enum.UserInputType.MouseButton1 and Item.Hover then
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch and Item.Hover then
 						Item.MouseDown = true
 						DropDown.HoveringItem = true
 						Daily:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(102, 102, 102)})
@@ -1638,7 +1632,7 @@ function Daily:Init(options)
 				uis.InputBegan:Connect(function(input, gpe)
 					if gpe then return end
 
-					if input.UserInputType == Enum.UserInputType.MouseButton1 and DropDown.Hover then
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch and DropDown.Hover then
 						DropDown.MouseDown = true
 						Daily:tween(DropDown["42"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
 						Daily:tween(DropDown["44"], {Color = Color3.fromRGB(200, 200, 200)})
@@ -2014,7 +2008,7 @@ function Daily:Init(options)
 		Popup["7g"].InputBegan:Connect(function(input, gpe)
 			if gpe then return end
 			
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				Popup["71"].Visible = false
 			end
 		end)
@@ -2022,7 +2016,7 @@ function Daily:Init(options)
 		Popup["7h"].InputBegan:Connect(function(input, gpe)
 			if gpe then return end
 
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				Popup["71"].Visible = false
 			end
 		end)
