@@ -1904,8 +1904,7 @@ function Daily:Init(options)
 		options = Daily:validate({
 			Text = "Are you sure?",
 			Confirm = "Yes",
-			Cancel = "No",
-			Callback = function() end
+			Cancel = "No"
 		}, options or {})
 
 		local Popup = {}
