@@ -1904,7 +1904,9 @@ function Daily:Init(options)
 		options = Daily:validate({
 			Text = "Are you sure?",
 			Confirm = "Yes",
-			Cancel = "No"
+			Cancel = "No",
+			Confirmcallback = function() end
+			Cancelcallback = function() end
 		}, options or {})
 
 		local Popup = {}
@@ -2009,6 +2011,7 @@ function Daily:Init(options)
 			
 			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				Popup["71"].Visible = false
+				option
 			end
 		end)
 		
