@@ -1905,7 +1905,7 @@ function Daily:Init(options)
 			Text = "Are you sure?",
 			Confirm = "Yes",
 			Cancel = "No",
-			Confirmcallback = function() end
+			Confirmcallback = function() end,
 			Cancelcallback = function() end
 		}, options or {})
 
