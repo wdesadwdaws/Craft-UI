@@ -1,7 +1,3 @@
---[[
-	Stop looking a source bruh
-]]
-
 -- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -238,6 +234,13 @@ function Daily:Init(options)
 				updateDrag(input, GUI["2"])
 			end
 		end)
+		
+		-- StarterGui.Daily UI.Main.UIGradient
+		local MainGradient = Instance.new("UIGradient", GUI["2"]);
+		MainGradient.Transparency = NumberSequence.new{NumberSequenceKeypoint.new(0.000, 0.3),NumberSequenceKeypoint.new(1.000, 0.3)};
+		MainGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(54, 54, 54)),ColorSequenceKeypoint.new(0.567, Color3.fromRGB(158, 159, 161)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(161, 163, 163))};
+
+
 
 
 		-- StarterGui.CraftGui.Main.UICorner
@@ -1896,13 +1899,138 @@ function Daily:Init(options)
 			end
 			return KeyBind
 		end
-		
-		
-			
-			
+
+
+
+
 		return Tab
 	end
+	
+	function GUI:Popup(options)
+		options = Daily:validate({
+			Text = "Are you sure?",
+			Confirm = "Yes",
+			Cancel = "No",
+			Callback = function() end
+		}, options or {})
 
+		local Popup = {}
+		
+		-- Render
+		do
+			-- StarterGui.Daily UI.Main.Popup
+			Popup["71"] = Instance.new("Frame", GUI["2"]);
+			Popup["71"]["BorderSizePixel"] = 0;
+			Popup["71"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Popup["71"]["Size"] = UDim2.new(0, 400, 0, 300);
+			Popup["71"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Popup["71"]["Name"] = [[Popup]];
+			Popup["71"]["BackgroundTransparency"] = 1;
+
+
+			-- StarterGui.Daily UI.Main.Popup.Darkness
+			Popup["72"] = Instance.new("Frame", Popup["71"]);
+			Popup["72"]["BorderSizePixel"] = 0;
+			Popup["72"]["BackgroundColor3"] = Color3.fromRGB(213, 215, 215);
+			Popup["72"]["Size"] = UDim2.new(0, 400, 0, 300);
+			Popup["72"]["Position"] = UDim2.new(0.01, 0, 0, 0);
+			Popup["72"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Popup["72"]["Name"] = [[Darkness]];
+			Popup["72"]["BackgroundTransparency"] = 0.3;
+
+
+			-- StarterGui.Daily UI.Main.Popup.Darkness.UIGradient
+			Popup["73"] = Instance.new("UIGradient", Popup["72"]);
+			Popup["73"]["Transparency"] = NumberSequence.new{NumberSequenceKeypoint.new(0.000, 0.3),NumberSequenceKeypoint.new(1.000, 0.3)};
+			Popup["73"]["Color"] = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(54, 54, 54)),ColorSequenceKeypoint.new(0.567, Color3.fromRGB(158, 159, 161)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(161, 163, 163))};
+
+
+			-- StarterGui.Daily UI.Main.Popup.PopupHolder
+			Popup["74"] = Instance.new("Frame", Popup["71"]);
+			Popup["74"]["BorderSizePixel"] = 0;
+			Popup["74"]["BackgroundColor3"] = Color3.fromRGB(100, 102, 102);
+			Popup["74"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+			Popup["74"]["Size"] = UDim2.new(0, 270, 0, 150);
+			Popup["74"]["Position"] = UDim2.new(0.55, 0, 0.5, 0);
+			Popup["74"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Popup["74"]["Name"] = [[PopupHolder]];
+			Popup["74"]["BackgroundTransparency"] = 0.3;
+
+
+			-- StarterGui.Daily UI.Main.Popup.PopupHolder.UIGradient
+			Popup["7e"] = Instance.new("UIGradient", Popup["74"]);
+			Popup["7e"]["Transparency"] = NumberSequence.new{NumberSequenceKeypoint.new(0.000, 0.3),NumberSequenceKeypoint.new(1.000, 0.3)};
+			Popup["7e"]["Color"] = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(54, 54, 54)),ColorSequenceKeypoint.new(0.567, Color3.fromRGB(158, 159, 161)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(161, 163, 163))};
+
+
+			-- StarterGui.Daily UI.Main.Popup.PopupHolder.Title
+			Popup["7f"] = Instance.new("TextLabel", Popup["74"]);
+			Popup["7f"]["TextWrapped"] = true;
+			Popup["7f"]["BorderSizePixel"] = 0;
+			Popup["7f"]["TextSize"] = 14;
+			Popup["7f"]["TextScaled"] = true;
+			Popup["7f"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+			Popup["7f"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+			Popup["7f"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+			Popup["7f"]["BackgroundTransparency"] = 1;
+			Popup["7f"]["Size"] = UDim2.new(0, 270, 0, 35);
+			Popup["7f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Popup["7f"]["Text"] = options.Text;
+			Popup["7f"]["Name"] = options.Text;
+
+
+			-- StarterGui.Daily UI.Main.Popup.PopupHolder.No
+			Popup["7g"] = Instance.new("TextLabel", Popup["74"]);
+			Popup["7g"]["TextWrapped"] = true;
+			Popup["7g"]["BorderSizePixel"] = 0;
+			Popup["7g"]["TextSize"] = 14;
+			Popup["7g"]["TextScaled"] = true;
+			Popup["7g"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0);
+			Popup["7g"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+			Popup["7g"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+			Popup["7g"]["Size"] = UDim2.new(0, 83, 0, 45);
+			Popup["7g"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Popup["7g"]["Text"] = options.Cancel;
+			Popup["7g"]["Name"] = options.Cancel;
+			Popup["7g"]["Position"] = UDim2.new(0, 0, 0.58, 0);
+
+
+			-- StarterGui.Daily UI.Main.Popup.PopupHolder.Yes
+			Popup["7h"] = Instance.new("TextLabel", Popup["74"]);
+			Popup["7h"]["TextWrapped"] = true;
+			Popup["7h"]["BorderSizePixel"] = 0;
+			Popup["7h"]["TextSize"] = 14;
+			Popup["7h"]["TextScaled"] = true;
+			Popup["7h"]["BackgroundColor3"] = Color3.fromRGB(49, 255, 38);
+			Popup["7h"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+			Popup["7h"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+			Popup["7h"]["Size"] = UDim2.new(0, 83, 0, 45);
+			Popup["7h"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+			Popup["7h"]["Text"] = options.Confirm
+			Popup["7h"]["Name"] = options.Confirm
+			Popup["7h"]["Position"] = UDim2.new(0.69259, 0, 0.58, 0);
+		end
+		
+		Popup["7g"].InputBegan:Connect(function(input, gpe)
+			if gpe then return end
+			
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				Popup["71"].Visible = false
+			end
+		end)
+		
+		Popup["7h"].InputBegan:Connect(function(input, gpe)
+			if gpe then return end
+
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				Popup["71"].Visible = false
+			end
+		end)
+			
+
+		return Popup
+	end
+	
 	return GUI
 end
 
@@ -2086,6 +2214,5 @@ function Daily:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 
 	return Notify
 end
-
 
 return Daily
