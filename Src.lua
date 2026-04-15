@@ -306,6 +306,7 @@ function Daily:Init(options)
 		GUI["9"]["Size"] = UDim2.new(0.5, 0, 1, 0);
 		GUI["9"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 		GUI["9"]["Text"] = options.Title;
+		GUI["9"]["TextScaled"] = true
 		GUI["9"]["Name"] = [[Title]];
 
 
@@ -474,6 +475,7 @@ function Daily:Init(options)
 			Tab["17"]["Size"] = UDim2.new(1, 0, 0, 24);
 			Tab["17"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 			Tab["17"]["Text"] = options.Text;
+			Tab["17"]["TextScaled"] = true
 			Tab["17"]["Name"] = options.Text;
 
 
@@ -631,6 +633,7 @@ function Daily:Init(options)
 				Button["20"]["Size"] = UDim2.new(1, -20, 1, 0);
 				Button["20"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 				Button["20"]["Text"] = options.Text;
+				Button["20"]["TextScaled"] = true
 				Button["20"]["Name"] = [[Title]];
 
 
@@ -1054,6 +1057,7 @@ function Daily:Init(options)
 				Toggle["56"]["Size"] = UDim2.new(1, -26, 1, 0);
 				Toggle["56"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 				Toggle["56"]["Text"] = options.Text;
+				Toggle["56"]["TextScaled"] = true
 				Toggle["56"]["Name"] = [[Title]];
 
 
@@ -1433,6 +1437,7 @@ function Daily:Init(options)
 				DropDown["45"]["Size"] = UDim2.new(1, -20, 0, 20);
 				DropDown["45"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 				DropDown["45"]["Text"] = options.Text;
+				DropDown["45"]["TextScaled"] = true
 				DropDown["45"]["Name"] = [[Title]];
 
 
@@ -1502,6 +1507,7 @@ function Daily:Init(options)
 				DropDown.Items[id].instance["4a"].Size = UDim2.new(1, 0, 0, 16)
 				DropDown.Items[id].instance["4a"].BorderColor3 = Color3.fromRGB(0, 0, 0)
 				DropDown.Items[id].instance["4a"].Text = id
+				DropDown.Items[id].instance["4a"].TextScaled = true
 				DropDown.Items[id].instance["4a"].Name = id
 
 				-- StarterGui.CraftGui.Main.ConentContainer.HomeTab.Dropdown.OptionHolder.Inactive Option.UIStroke
@@ -1718,6 +1724,7 @@ function Daily:Init(options)
 				TextBox["63"]["Size"] = UDim2.new(1, 0, 1, 0);
 				TextBox["63"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 				TextBox["63"]["Text"] = options.Text;
+				TextBox["63"]["TextScaled"] = true
 				TextBox["63"]["BackgroundTransparency"] = 1;
 
 
@@ -1821,6 +1828,7 @@ function Daily:Init(options)
 				KeyBind["7b"]["Size"] = UDim2.new(1, 0, 1, 0);
 				KeyBind["7b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 				KeyBind["7b"]["Text"] = options.Text;
+				KeyBind["7b"]["TextScaled"] = true
 				KeyBind["7b"]["Name"] = [[Title]];
 
 
@@ -1846,6 +1854,7 @@ function Daily:Init(options)
 				KeyBind["7d"]["Size"] = UDim2.new(1, 0, 1, 0);
 				KeyBind["7d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 				KeyBind["7d"]["Text"] = options.Text;
+				KeyBind["7d"]["TextScaled"] = true
 				KeyBind["7d"]["Name"] = [[BindText]];
 				KeyBind["7d"]["Position"] = UDim2.new(1, 0, 0, 0);
 
