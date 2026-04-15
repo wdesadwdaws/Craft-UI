@@ -1632,7 +1632,7 @@ function Daily:Init(options)
 				uis.InputBegan:Connect(function(input, gpe)
 					if gpe then return end
 
-					if input.UserInputType == Enum.UserInputType.MouseButton1 and Item.Hover or input.UserInputType == Enum.UserInputType.Touch and DropDown.Hover then
+					if input.UserInputType == Enum.UserInputType.MouseButton1 and DropDown.Hover or input.UserInputType == Enum.UserInputType.Touch and DropDown.Hover then
 						DropDown.MouseDown = true
 						Daily:tween(DropDown["42"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
 						Daily:tween(DropDown["44"], {Color = Color3.fromRGB(200, 200, 200)})
