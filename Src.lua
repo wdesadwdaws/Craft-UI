@@ -1221,6 +1221,7 @@ function Daily:Init(options)
 				Slider["3a"]["Size"] = UDim2.new(1, -24, 1, -10);
 				Slider["3a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 				Slider["3a"]["Text"] = options.Text;
+				Slider["3a"]["TextScaled"] = true
 				Slider["3a"]["Name"] = [[Title]];
 
 
@@ -1247,6 +1248,7 @@ function Daily:Init(options)
 				Slider["3c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 				Slider["3c"]["Text"] = tostring(options.default);
 				Slider["3c"]["Name"] = [[Value]];
+				Slider["3c"]["TextScaled"] = true
 				Slider["3c"]["Position"] = UDim2.new(1, 0, 0, 0);
 
 
