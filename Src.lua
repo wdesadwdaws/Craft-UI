@@ -2011,7 +2011,7 @@ function Daily:Init(options)
 			
 			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				Popup["71"].Visible = false
-				option.Confirmcallback()
+				options.Confirmcallback()
 			end
 		end)
 		
@@ -2020,7 +2020,7 @@ function Daily:Init(options)
 
 			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				Popup["71"].Visible = false
-				option.Cancelcallback()
+				options.Cancelcallback()
 			end
 		end)
 			
