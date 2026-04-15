@@ -1629,7 +1629,7 @@ function Daily:Init(options)
 					end
 				end)
 
-				DropDown["42"].InputBegan:Connect(function(input, gpe)
+				uis.InputBegan:Connect(function(input, gpe)
 					if gpe then return end
 
 					if input.UserInputType == Enum.UserInputType.MouseButton1 and DropDown.Hover then
