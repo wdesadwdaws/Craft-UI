@@ -1905,8 +1905,8 @@ function Daily:Init(options)
 			Text = "Are you sure?",
 			Confirm = "Yes",
 			Cancel = "No",
-			Confirmcallback = function() end,
-			Cancelcallback = function() end
+			ConfirmCallback = function() end,
+			CancelCallback = function() end
 		}, options or {})
 
 		local Popup = {}
@@ -2009,18 +2009,18 @@ function Daily:Init(options)
 		Popup["7g"].InputBegan:Connect(function(input, gpe)
 			if gpe then return end
 			
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Popup["71"].Visible = false
-				options.Confirmcallback()
+				options.CancelCallback()
 			end
 		end)
 		
 		Popup["7h"].InputBegan:Connect(function(input, gpe)
 			if gpe then return end
 
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Popup["71"].Visible = false
-				options.Cancelcallback()
+				options.ConfirmCallback()
 			end
 		end)
 			
