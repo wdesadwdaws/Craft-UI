@@ -514,7 +514,10 @@ function Daily:Init(options)
 			Tab["19"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
 			Tab["19"]["ImageColor3"] = Color3.fromRGB(200, 200, 200);
 			Tab["19"]["AnchorPoint"] = Vector2.new(0, 0.5);
-			Tab["19"]["Image"] = options.Icon;
+			Tab["19"]["Image"] =
+			(typeof(options.Icon) == "string"
+			and options.Icon:match("^rbxassetid://%d+$")
+			and options.Icon)
 			Tab["19"]["Size"] = UDim2.new(0, 20, 0, 20);
 			Tab["19"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 			Tab["19"]["BackgroundTransparency"] = 1;
