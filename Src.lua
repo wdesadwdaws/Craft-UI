@@ -7,6 +7,8 @@ local HttpService = game:GetService("HttpService")
 local coreGui = game:GetService("CoreGui")
 local SoundService = game:GetService("SoundService")
 local GuiService = game:GetService("GuiService")
+local Workspace = game:GetService("Workspace")
+local ContentProvider = game:GetService("ContentProvider")
 
 -- Vars
 local lp = Players.LocalPlayer
@@ -67,16 +69,38 @@ local Icons = {
 	}
 }
 
-local Sounds = {
-	Notify = {
-		Notify1 = "6026984224"
-	},
-	Default = {
-		Notify1 = "6026984224"
-	}
-}
 
 
+local SoundAssets = { 
+	Hover = "rbxassetid://6895079853", 
+	Click = "rbxassetid://1412830636", 
+	Notify = "rbxassetid://6026984224" 
+} 
+local SoundEnabled = true 
+local LoadedSounds = {} 
+local function CreateSound() 
+	local SoundFolder = Instance.new("Folder") 
+	SoundFolder.Name = "Sounds" 
+	SoundFolder.Parent = Workspace 
+	for name, id in pairs(SoundAssets) do 
+		local s = Instance.new("Sound") 
+		s.Name = name 
+		s.SoundId = id 
+		s.Volume = 0.5 
+		s.Parent = SoundFolder 
+		LoadedSounds[name] = s 
+	end 
+	ContentProvider:PreloadAsync(SoundFolder:GetChildren()) 
+end 
+task.spawn(CreateSound) 
+
+local function PlayAudio(name) 
+	if not SoundEnabled then return end 
+	local sound = LoadedSounds[name] 
+	if sound then 
+		sound:Play() 
+	end 
+end
 
 function Daily:validate(defaults, options)	
 	for i, v in pairs(defaults) do
@@ -561,6 +585,7 @@ function Daily:Init(options)
 				if not Tab.Active then
 					Daily:tween(Tab["17"], {TextColor3 = Color3.fromRGB(255, 255, 255)})
 					Daily:tween(Tab["19"], {ImageColor3 = Color3.fromRGB(255, 255, 255)})
+					PlayAudio("Hover")
 				end
 			end)
 
@@ -575,11 +600,12 @@ function Daily:Init(options)
 
 			uis.InputBegan:Connect(function(input)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-				if Tab.Hover then
-					Tab:Activate()
+					if Tab.Hover then
+						Tab:Activate()
+						PlayAudio("Click")
+					end
 				end
-			end
-		end)
+			end)
 
 			if GUI.CurrentTab == nil then
 				Tab:Activate()
@@ -674,6 +700,7 @@ function Daily:Init(options)
 					Button.Hover = true
 
 					Daily:tween(Button["1f"], {Color = Color3.fromRGB(102, 102, 102)})
+					PlayAudio("Hover")
 				end)
 
 				Button["1d"].MouseLeave:Connect(function()
@@ -691,6 +718,7 @@ function Daily:Init(options)
 						Button.MouseDown = true
 						Daily:tween(Button["1d"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
 						Daily:tween(Button["1f"], {Color = Color3.fromRGB(200, 200, 200)})
+						PlayAudio("Click")
 						options.callback()
 					end
 				end)
@@ -1132,6 +1160,7 @@ function Daily:Init(options)
 					Toggle.Hover = true
 
 					Daily:tween(Toggle["55"], {Color = Color3.fromRGB(102, 102, 102)})
+					PlayAudio("Hover")
 				end)
 
 				Toggle["53"].MouseLeave:Connect(function()
@@ -1150,6 +1179,7 @@ function Daily:Init(options)
 						Daily:tween(Toggle["53"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
 						Daily:tween(Toggle["55"], {Color = Color3.fromRGB(200, 200, 200)})
 						Toggle:Toggle()
+						PlayAudio("Click")
 					end
 				end)
 
@@ -1320,6 +1350,7 @@ function Daily:Init(options)
 					Daily:tween(Slider["39"], {Color = Color3.fromRGB(102, 102, 102)})
 					Daily:tween(Slider["3f"], {Color = Color3.fromRGB(102, 102, 102)})
 					Daily:tween(Slider["40"], {BackgroundColor3 = Color3.fromRGB(102, 102, 102)})
+					PlayAudio("Hover")
 				end)
 
 				Slider["37"].MouseLeave:Connect(function()
@@ -1336,6 +1367,7 @@ function Daily:Init(options)
 					if gpe then return end
 
 					if input.UserInputType == Enum.UserInputType.MouseButton1 and Slider.Hover then
+						PlayAudio("Click")
 						Slider.MouseDown = true
 						Daily:tween(Slider["37"], {BackgroundColor3 = Color3.fromRGB(57, 57, 57)})
 						Daily:tween(Slider["39"], {Color = Color3.fromRGB(200, 200, 200)})
@@ -1526,6 +1558,7 @@ function Daily:Init(options)
 					if Item.Hover then
 						Daily:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(102, 102, 102)})
 						Daily:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(82, 82, 82)})
+						PlayAudio("Hover")
 					end
 				end)
 
@@ -1548,6 +1581,7 @@ function Daily:Init(options)
 						DropDown.HoveringItem = true
 						Daily:tween(DropDown.Items[id].instance["4a"], {BackgroundColor3 = Color3.fromRGB(102, 102, 102)})
 						Daily:tween(DropDown.Items[id].instance["4b"], {Color = Color3.fromRGB(102, 102, 102)})
+						PlayAudio("Click")
 						options.callback(value)
 					end
 				end)
@@ -1627,6 +1661,7 @@ function Daily:Init(options)
 					DropDown.Hover = true
 
 					Daily:tween(DropDown["44"], {Color = Color3.fromRGB(200, 200, 200)})
+					PlayAudio("Hover")
 				end)
 
 				DropDown["42"].MouseLeave:Connect(function()
@@ -1647,6 +1682,7 @@ function Daily:Init(options)
 						if not DropDown.HoveringItem then
 							DropDown:Toggle()
 						end
+						PlayAudio("Click")
 					end
 				end)
 
@@ -1910,7 +1946,7 @@ function Daily:Init(options)
 
 		return Tab
 	end
-	
+
 	function GUI:Popup(options)
 		options = Daily:validate({
 			Text = "Are you sure?",
@@ -1921,7 +1957,7 @@ function Daily:Init(options)
 		}, options or {})
 
 		local Popup = {}
-		
+
 		-- Render
 		do
 			-- StarterGui.Daily UI.Main.Popup
@@ -2017,55 +2053,44 @@ function Daily:Init(options)
 			Popup["7h"]["Position"] = UDim2.new(0.69259, 0, 0.58, 0);
 		end
 		
+		Popup["7g"].MouseEnter:Connect(function()
+			PlayAudio("Hover")
+		end)
+
 		Popup["7g"].InputBegan:Connect(function(input, gpe)
 			if gpe then return end
-			
+
 			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Popup["71"].Visible = false
+				PlayAudio("Click")
 				options.CancelCallback()
 			end
 		end)
-		
+
 		Popup["7h"].InputBegan:Connect(function(input, gpe)
 			if gpe then return end
 
 			if input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Popup["71"].Visible = false
+				PlayAudio("Click")
 				options.ConfirmCallback()
 			end
 		end)
-			
+
 
 		return Popup
 	end
-	
+
 	return GUI
 end
-
-function Daily:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
-	local options
-
-	if typeof(firstArg) == "table" then
-		options = firstArg
-	else
-		options = {
-			Title   = firstArg,
-			Text    = secondArg,
-			Time    = thirdArg,
-			SoundID = fourthArg,
-		}
-	end
-
-	local Title = options.Title or "Notification"
-	local Text = options.Text or "Message"
-	local Time = options.Time or 3
-	local SoundID = options.SoundID or Sounds.Default.Notify1
-	local Volume  = options.Volume or 0.5
-
-	if typeof(Title) ~= "string" then Title = tostring(Title) or "Notification" end
-	if typeof(Text) ~= "string" then Text = tostring(Text) or "Message"	end
-	if typeof(Time) ~= "number" then Time = 3	end
-	if typeof(Volume) ~= "number" then Volume = 0.5	end
+function Daily:Notify(options)
+	options = Daily:validate({
+		Title = "Notification",
+		Text = "Message",
+		Time = 3,
+		Volume = 0.5,
+	}, options or {})
+	PlayAudio("Notify")
 
 	local Notify = {}
 
@@ -2101,7 +2126,7 @@ function Daily:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 		Notify["4"]["BackgroundTransparency"] = 1;
 		Notify["4"]["Size"] = UDim2.new(0, 250, 0, 30);
 		Notify["4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		Notify["4"]["Text"] = Title;
+		Notify["4"]["Text"] = options.Title;
 		Notify["4"]["Name"] = [[Title]];
 		Notify["4"]["TextTransparency"] = 1;
 
@@ -2121,7 +2146,7 @@ function Daily:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 		Notify["6"]["BackgroundTransparency"] = 1;
 		Notify["6"]["Size"] = UDim2.new(0, 250, 0, 170);
 		Notify["6"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		Notify["6"]["Text"] = Text;
+		Notify["6"]["Text"] = options.Text;
 		Notify["6"]["Name"] = [[Text]];
 		Notify["6"]["Position"] = UDim2.new(0, 0, 0, 30);
 		Notify["6"]["TextTransparency"] = 1;
@@ -2184,21 +2209,6 @@ function Daily:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 		Notify["11"] = Instance.new("UICorner", Notify["10"]);
 		Notify["11"]["CornerRadius"] = UDim.new(0, 4);
 
-		Notify["12"] = Instance.new("Sound", Notify["2"]);
-
-		local finalSoundID
-		if typeof(SoundID) == "string" or typeof(SoundID) == "number" then
-			finalSoundID = tostring(SoundID)
-		else
-			finalSoundID = Sounds.Default.Notify1 or Sounds.Notify.Notify1 or "6026984224"
-		end
-
-		Notify["12"].SoundId = "rbxassetid://" .. finalSoundID
-		Notify["12"].Volume = math.clamp(Volume, 0, 2)
-		Notify["12"].Name = "Notify1"
-		Notify["12"]:Play()
-		game:GetService("Debris"):AddItem(Notify["12"], 6)
-
 		Daily:tween(Notify["2"], {
 			Position = UDim2.new(1, -10, 1, -10),
 			BackgroundTransparency = 0.6
@@ -2206,7 +2216,7 @@ function Daily:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 		Daily:tween(Notify["4"], {TextTransparency = 0})
 		Daily:tween(Notify["6"], {TextTransparency = 0})
 
-		task.delay(Time, function()
+		task.delay(options.Time, function()
 			Daily:tween(Notify["2"], {BackgroundTransparency = 1})
 			task.delay(0.4, function()
 				Daily:tween(Notify["4"], {TextTransparency = 1})
@@ -2224,3 +2234,4 @@ function Daily:Notify(firstArg, secondArg, thirdArg, fourthArg, ...)
 end
 
 return Daily
+
