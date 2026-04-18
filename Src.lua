@@ -500,7 +500,7 @@ function Daily:Init(options)
 			Tab["17"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 			Tab["17"]["Text"] = options.Text;
 			Tab["17"]["TextScaled"] = true
-			Tab["17"]["Name"] = options.Text;
+			Tab["17"]["Name"] = tostring(options.Text):gsub("[^%w_ ]", "")
 
 
 			-- StarterGui.CraftGui.Main.Navigation.ButtonHolder.Inactive.UIPadding
