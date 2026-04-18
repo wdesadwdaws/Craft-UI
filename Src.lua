@@ -535,6 +535,7 @@ function Daily:Init(options)
 			Tab["100"]["Text"] = options.Icon;
 			Tab["100"]["TextScaled"] = true
 			Tab["100"]["Name"] = [["Textdupe"]]
+			Tab["19"]["AnchorPoint"] = Vector2.new(0, 0.5);
 			Tab["100"]["Postion"] = UDim2.new(0, -24, 0.5, 0);
 
 
