@@ -521,24 +521,6 @@ function Daily:Init(options)
 			Tab["19"]["Name"] = [[Icon]];
 			Tab["19"]["Position"] = UDim2.new(0, -24, 0.5, 0);
 
-			-- StarterGui.CraftGui.Main.Navigation.ButtonHolder.TextDupe
-			Tab["100"] = Instance.new("TextLabel", Tab["17"]);
-			Tab["100"]["BorderSizePixel"] = 0;
-			Tab["100"]["TextSize"] = 12;
-			Tab["100"]["TextXAlignment"] = Enum.TextXAlignment.Left;
-			Tab["100"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-			Tab["100"]["FontFace"] = Font.new([[rbxasset://fonts/families/Ubuntu.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-			Tab["100"]["TextColor3"] = Color3.fromRGB(200, 200, 200);
-			Tab["100"]["BackgroundTransparency"] = 1;
-			Tab["100"]["Size"] = UDim2.new(0, 20, 0, 20);
-			Tab["100"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-			Tab["100"]["Text"] = options.Icon;
-			Tab["100"]["TextScaled"] = true
-			Tab["100"]["Name"] = [["Textdupe"]]
-			Tab["19"]["AnchorPoint"] = Vector2.new(0, 0.5);
-			Tab["100"]["Postion"] = UDim2.new(0, -24, 0.5, 0);
-
-
 			-- StarterGui.CraftGui.Main.ConentContainer.HomeTab
 			Tab["1c"] = Instance.new("ScrollingFrame", GUI["1b"]);
 			Tab["1c"]["BorderSizePixel"] = 0;
