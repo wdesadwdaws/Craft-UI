@@ -510,17 +510,31 @@ function Daily:Init(options)
 
 
 			-- StarterGui.CraftGui.Main.Navigation.ButtonHolder.Inactive.Icon
-			Tab["19"] = Instance.new("ImageLabel", Tab["17"]);
-			Tab["19"]["BorderSizePixel"] = 0;
-			Tab["19"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-			Tab["19"]["ImageColor3"] = Color3.fromRGB(200, 200, 200);
-			Tab["19"]["AnchorPoint"] = Vector2.new(0, 0.5);
-			Tab["19"]["Image"] = options.Icon
-			Tab["19"]["Size"] = UDim2.new(0, 20, 0, 20);
-			Tab["19"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-			Tab["19"]["BackgroundTransparency"] = 1;
-			Tab["19"]["Name"] = [[Icon]];
-			Tab["19"]["Position"] = UDim2.new(0, -24, 0.5, 0);
+			if typeof(options.Icon) == "string" and not options.Icon:match("^rbxassetid://") then
+				-- EMOJI ICON
+				Tab["19"] = Instance.new("TextLabel", Tab["17"])
+				Tab["19"]["BorderSizePixel"] = 0
+				Tab["19"]["BackgroundTransparency"] = 1
+				Tab["19"]["TextColor3"] = Color3.fromRGB(200, 200, 200)
+				Tab["19"]["FontFace"] = Font.new([[rbxasset://fonts/families/Ubuntu.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+				Tab["19"]["TextScaled"] = true
+				Tab["19"]["Text"] = options.Icon
+			else
+				-- IMAGE ICON
+				Tab["19"] = Instance.new("ImageLabel", Tab["17"])
+				Tab["19"]["BorderSizePixel"] = 0
+				Tab["19"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
+				Tab["19"]["ImageColor3"] = Color3.fromRGB(200, 200, 200)
+				Tab["19"]["Image"] = options.Icon
+			end
+
+-- shared settings (both types)
+Tab["19"]["AnchorPoint"] = Vector2.new(0, 0.5)
+Tab["19"]["Size"] = UDim2.new(0, 20, 0, 20)
+Tab["19"]["BorderColor3"] = Color3.fromRGB(0, 0, 0)
+Tab["19"]["BackgroundTransparency"] = 1
+Tab["19"]["Name"] = "Icon"
+Tab["19"]["Position"] = UDim2.new(0, 4, 0.5, 0)
 
 			-- StarterGui.CraftGui.Main.ConentContainer.HomeTab
 			Tab["1c"] = Instance.new("ScrollingFrame", GUI["1b"]);
