@@ -541,6 +541,7 @@ function Daily:Init(options)
 			Tab["19"]["BackgroundTransparency"] = 1
 			Tab["19"]["Name"] = "Icon"
 			Tab["19"]["Position"] = UDim2.new(0, 4, 0.5, 0)
+			Tab["19"]["ImageColor3"] = Color3.fromRGB(200, 200, 200);
 
 			-- StarterGui.CraftGui.Main.ConentContainer.HomeTab
 			Tab["1c"] = Instance.new("ScrollingFrame", GUI["1b"]);
