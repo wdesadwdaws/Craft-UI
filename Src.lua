@@ -448,6 +448,7 @@ function Daily:Init(options)
 		GUI["11"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 		GUI["11"]["Name"] = [[ButtonHolder]];
 		GUI["11"]["BackgroundTransparency"] = 1;
+		GUI["11"].AutomaticSize = Enum.AutomaticSize.Y
 
 
 		-- StarterGui.CraftGui.Main.Navigation.ButtonHolder.UIPadding
