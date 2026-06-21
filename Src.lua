@@ -1425,7 +1425,7 @@ function Daily:Init(options)
 			return Slider
 		end
 
-		function Tab:Dropdown(options)
+		function Tab.Dropdown(options)
 			options = Daily:validate({
 				Text = "Daily Dropdown",
 				Icon = Icons.DefaultIcon.Down,
