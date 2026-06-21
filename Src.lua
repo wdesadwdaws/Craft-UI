@@ -1646,6 +1646,10 @@ function Daily:Init(options)
 				end
 			end
 
+			function Dropdown:GetSelected()
+				return Dropdown.Selected
+			end
+
 
 			function DropDown:Toggle()
 				if DropDown.Open then
