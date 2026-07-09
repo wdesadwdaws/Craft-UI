@@ -161,6 +161,8 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		Main.Position = UDim2.new(0.5, 0, 0.5, 0)
 		Main.Size = UDim2.new(0.427655011, 0, 0.4540295, 0)
 
+		lib:MakeDraggable(Main)
+
 		UICorner.CornerRadius = UDim.new(0, 6)
 		UICorner.Parent = Main
 		
