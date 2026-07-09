@@ -161,7 +161,9 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		Main.Position = UDim2.new(0.5, 0, 0.5, 0)
 		Main.Size = UDim2.new(0.427655011, 0, 0.4540295, 0)
 
-		lib:MakeDraggable(Main)
+		if draggable ~= false then
+        	lib:MakeDraggable(Main)
+    	end
 
 		UICorner.CornerRadius = UDim.new(0, 6)
 		UICorner.Parent = Main
@@ -218,20 +220,19 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		Search.TextSize = 14.000
 
 		Close.Name = "Close"
-		Close.Parent = Topbar
-		Close.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Close.BackgroundTransparency = 1.000
-		Close.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		Close.BorderSizePixel = 0
-		Close.Position = UDim2.new(0.681666672, 0, 0.127272725, 0)
-		Close.Size = UDim2.new(0.0666666701, 0, 0.727272749, 0)
-		Close.Image = "rbxassetid://10734896206"
-		Close.ImageColor3 = Color3.fromRGB(140, 140, 140)
+    	Close.Parent = Topbar
+    	Close.BackgroundTransparency = 1
+    	Close.Position = UDim2.new(1, -46, 0.5, -12)
+    	Close.Size = UDim2.new(0, 24, 0, 24)
+    	Close.Image = "rbxassetid://3926305904"
+    	Close.ImageRectOffset = Vector2.new(284, 4)
+    	Close.ImageRectSize = Vector2.new(24, 24)
 
-		Close.MouseButton1Click:Connect(function()
+    	Close.MouseButton1Click:Connect(function()
         	Preview:Destroy()
-   	 	end)
-		if keybind then
+    	end)
+
+    	if keybind then
         	uis.InputBegan:Connect(function(input, gameProcessed)
             	if gameProcessed then return end
             	if input.KeyCode == keybind then
