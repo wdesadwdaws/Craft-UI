@@ -233,13 +233,16 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
     	end)
 
     	if keybind then
-        	uis.InputBegan:Connect(function(input, gameProcessed)
-            	if gameProcessed then return end
-            	if input.KeyCode == keybind then
-                	Main.Visible = not Main.Visible
-            	end
-        	end)
-    	end
+			uis.InputBegan:Connect(function(input)
+			if input.UserInputType ~= Enum.UserInputType.Keyboard then
+				return
+			end
+
+			if input.KeyCode == keybind then
+				Main.Visible = not Main.Visible
+			end
+		end)
+	end
 
 		Exit.Name = "Exit"
 		Exit.Parent = Topbar
@@ -1181,6 +1184,6 @@ function lib:Notify(title, text, duration)
 	end)
 end
 
-lib:Notify("Success", "Settings saved!", 3)
+lib:Notify("Success", "Loaded", 3)
 
 return lib
