@@ -162,14 +162,6 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		Main.Size = UDim2.new(0.427655011, 0, 0.4540295, 0)
 
 		lib:MakeDraggable(Main)
-		if keybind then
-       		uis.InputBegan:Connect(function(input, gameProcessed)
-            	if gameProcessed then return end
-            	if input.KeyCode == keybind then
-               		Main.Visible = not Main.Visible
-            	end
-        	end)
-    	end
 
 		UICorner.CornerRadius = UDim.new(0, 6)
 		UICorner.Parent = Main
@@ -254,7 +246,15 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 
 		Close.MouseButton1Click:Connect(function()
         	Preview:Destroy()
-    	end)
+   	 	end)
+		if keybind then
+        	uis.InputBegan:Connect(function(input, gameProcessed)
+            	if gameProcessed then return end
+            	if input.KeyCode == keybind then
+                	Main.Visible = not Main.Visible
+            	end
+        	end)
+    	end
 
 		Exit.Name = "Exit"
 		Exit.Parent = Topbar
