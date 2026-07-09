@@ -319,6 +319,31 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 
 	Tabs.Name = "Tabs"
 	Tabs.Parent = TabHolder
+
+	Search:GetPropertyChangedSignal("Text"):Connect(function()
+		local SearchText = string.lower(Search.Text)
+
+		for _, Tab in ipairs(Tabs:GetChildren()) do
+			if Tab:IsA("ScrollingFrame") then
+				for _, Item in ipairs(Tab:GetChildren()) do
+					if Item:IsA("GuiObject") then
+						local Name = string.lower(Item.Name)
+						local Text = ""
+
+						if Item:IsA("TextButton") or Item:IsA("TextLabel") or Item:IsA("TextBox") then
+							Text = string.lower(Item.Text)
+						end
+
+						if SearchText == "" or string.find(Name, SearchText) or string.find(Text, SearchText) then
+							Item.Visible = true
+						else
+							Item.Visible = false
+						end
+					end
+				end
+			end
+		end
+	end)
 	
 	function GUI:CreateTab(text: string)
 		if not text or typeof(text) ~= "string" then
