@@ -217,22 +217,6 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		Search.TextColor3 = Color3.fromRGB(0, 0, 0)
 		Search.TextSize = 14.000
 
-		Search:GetPropertyChangedSignal("Text"):Connect(function()
-			local Search = string.lower(SearchBox.Text)
-
-			for _, Child in pairs(TabFrame:GetChildren()) do
-				if Child:IsA("Frame") or Child:IsA("TextButton") then
-					if Search == "" then
-						Child.Visible = true
-					elseif string.find(string.lower(Child.Name), Search) then
-						Child.Visible = true
-					else
-						Child.Visible = false
-					end
-				end
-			end
-		end)
-
 		Close.Name = "Close"
 		Close.Parent = Topbar
 		Close.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
