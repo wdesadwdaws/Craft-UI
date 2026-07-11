@@ -674,7 +674,10 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 				ToggleData.State = not ToggleData.State
 
 				if callback then
-					callback(ToggleData.State)
+					local ok, err = pcall(callback, ToggleData.State)
+					if not ok then
+   						warn("Toggle Error:", err)
+					end
 				end
 
 				if ToggleData.State then
