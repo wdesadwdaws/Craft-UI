@@ -32,47 +32,6 @@ function lib:tween(object, goal, callback, info)
 	return tween
 end
 
--- Make any frame draggable
-function lib:MakeDraggable(frame, dragArea)
-	dragArea = dragArea or frame -- if no specific area, use whole frame
-	
-	local dragging = false
-	local dragInput
-	local dragStart
-	local startPos
-	
-	local function update(input)
-		local delta = input.Position - dragStart
-		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-	end
-	
-	dragArea.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			dragging = true
-			dragStart = input.Position
-			startPos = frame.Position
-			
-			input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
-					dragging = false
-				end
-			end)
-		end
-	end)
-	
-	dragArea.InputChanged:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-			dragInput = input
-		end
-	end)
-	
-	game:GetService("UserInputService").InputChanged:Connect(function(input)
-		if dragging and input == dragInput then
-			update(input)
-		end
-	end)
-end
-
 function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme: string?)
 	local GUI = {}
 	GUI.Tabs = {}
@@ -161,10 +120,6 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		Main.Position = UDim2.new(0.5, 0, 0.5, 0)
 		Main.Size = UDim2.new(0.427655011, 0, 0.4540295, 0)
 
-		if draggable ~= false then
-        	lib:MakeDraggable(Main)
-    	end
-
 		UICorner.CornerRadius = UDim.new(0, 6)
 		UICorner.Parent = Main
 		
@@ -220,29 +175,15 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		Search.TextSize = 14.000
 
 		Close.Name = "Close"
-    	Close.Parent = Topbar
-    	Close.BackgroundTransparency = 1
-    	Close.Position = UDim2.new(1, -46, 0.5, -12)
-    	Close.Size = UDim2.new(0, 24, 0, 24)
-    	Close.Image = "rbxassetid://3926305904"
-    	Close.ImageRectOffset = Vector2.new(284, 4)
-    	Close.ImageRectSize = Vector2.new(24, 24)
-
-    	Close.MouseButton1Click:Connect(function()
-        	Preview:Destroy()
-    	end)
-
-    	if keybind then
-			uis.InputBegan:Connect(function(input)
-			if input.UserInputType ~= Enum.UserInputType.Keyboard then
-				return
-			end
-
-			if input.KeyCode == keybind then
-				Main.Visible = not Main.Visible
-			end
-		end)
-	end
+		Close.Parent = Topbar
+		Close.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Close.BackgroundTransparency = 1.000
+		Close.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		Close.BorderSizePixel = 0
+		Close.Position = UDim2.new(0.681666672, 0, 0.127272725, 0)
+		Close.Size = UDim2.new(0.0666666701, 0, 0.727272749, 0)
+		Close.Image = "rbxassetid://10734896206"
+		Close.ImageColor3 = Color3.fromRGB(140, 140, 140)
 
 		Exit.Name = "Exit"
 		Exit.Parent = Topbar
@@ -319,31 +260,6 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 
 	Tabs.Name = "Tabs"
 	Tabs.Parent = TabHolder
-
-	Search:GetPropertyChangedSignal("Text"):Connect(function()
-		local SearchText = string.lower(Search.Text)
-
-		for _, Tab in ipairs(Tabs:GetChildren()) do
-			if Tab:IsA("ScrollingFrame") then
-				for _, Item in ipairs(Tab:GetChildren()) do
-					if Item:IsA("GuiObject") then
-						local Name = string.lower(Item.Name)
-						local Text = ""
-
-						if Item:IsA("TextButton") or Item:IsA("TextLabel") or Item:IsA("TextBox") then
-							Text = string.lower(Item.Text)
-						end
-
-						if SearchText == "" or string.find(Name, SearchText) or string.find(Text, SearchText) then
-							Item.Visible = true
-						else
-							Item.Visible = false
-						end
-					end
-				end
-			end
-		end
-	end)
 	
 	function GUI:CreateTab(text: string)
 		if not text or typeof(text) ~= "string" then
@@ -674,10 +590,7 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 				ToggleData.State = not ToggleData.State
 
 				if callback then
-					local ok, err = pcall(callback, ToggleData.State)
-					if not ok then
-   						warn("Toggle Error:", err)
-					end
+					callback(ToggleData.State)
 				end
 
 				if ToggleData.State then
@@ -699,7 +612,9 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 			local DropdownData = {
 				Hover = false,
 				ItemHover = false,
-				Open = false
+				Open = false,
+				Options = {},
+				Selected = {}
 			}
 			
 			local Dropdown = Instance.new("Frame")
@@ -794,6 +709,7 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 			UIPadding_8.PaddingTop = UDim.new(0, 12)
 			
 			function DropdownData:Add(id, value)	
+				DropdownData.Options[id] = value
 				local Option = Instance.new("TextButton")
 				local UICorner_10 = Instance.new("UICorner")
 				local UIStroke_8 = Instance.new("UIStroke")
@@ -862,29 +778,20 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 				Option.MouseButton1Click:Connect(function(input, gpe)
 					if gpe then return end
 					
-					for _, v in ipairs(Items:GetChildren()) do
-						if v:IsA("TextButton") then
-							local Icon = v:FindFirstChild("Icon")
-
-							if Icon then
-								lib:tween(Icon, {ImageTransparency = 1})
-							end
-						end
+					if DropdownData.Selected[id] then
+						DropdownData.Selected[id] = nil
+						lib:tween(Icon_5, {ImageTransparency = 1})
+					else
+						DropdownData.Selected[id] = value
+						lib:tween(Icon_5, {ImageTransparency = 0})
 					end
 
-					lib:tween(Icon_5, {ImageTransparency = 0})
+					if callback then
+						callback(table.clone(DropdownData.Selected))
+					end
 
 					DropdownData.Open = false
 
-					lib:tween(Dropdown, {Size = UDim2.new(1, 0, 0, 45)})
-					lib:tween(Items, {Size = UDim2.new(1, 0, 0, 0)})
-					lib:tween(Icon_4, {Rotation = 0})
-
-					task.delay(0.2, function()
-						if not DropdownData.Open then
-							Items.Visible = false
-						end
-					end)
 
 					if callback then
 						callback(id, value)
@@ -933,6 +840,67 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 				end
 			end)
 
+			
+			function DropdownData:Remove(id)
+				local Option = Items:FindFirstChild(id)
+
+				if Option then
+					Option:Destroy()
+				end
+
+				Items.CanvasSize = UDim2.fromOffset(0, UIListLayout_3.AbsoluteContentSize.Y)
+			end
+			
+			function DropdownData:Clear()
+				for _, v in ipairs(Items:GetChildren()) do
+					if v:IsA("TextButton") then
+						v:Destroy()
+					end
+				end
+
+				Items.CanvasSize = UDim2.fromOffset(0, UIListLayout_3.AbsoluteContentSize.Y)
+			end
+			
+			function DropdownData:Refresh(options)
+				self:Clear()
+
+				for id, value in pairs(options) do
+					self:Add(id, value)
+				end
+			end
+			
+			function DropdownData:Set(id, state)
+				local Option = Items:FindFirstChild(id)
+
+				if not Option then
+					return
+				end
+
+				local Icon = Option:FindFirstChild("Icon")
+
+				if state then
+					DropdownData.Selected[id] = DropdownData.Options[id]
+
+					if Icon then
+						lib:tween(Icon, {ImageTransparency = 0})
+					end
+				else
+					DropdownData.Selected[id] = nil
+
+					if Icon then
+						lib:tween(Icon, {ImageTransparency = 1})
+					end
+				end
+
+				if callback then
+					callback(table.clone(DropdownData.Selected))
+				end
+			end
+			
+			function DropdownData:Setcallback()
+				
+			end
+			
 			if options then
 				for id, value in pairs(options) do
 					DropdownData:Add(id, value)
@@ -1212,6 +1180,6 @@ function lib:Notify(title, text, duration)
 	end)
 end
 
-lib:Notify("Success", "Loaded", 3)
+lib:Notify("Success", "UI Library loaded successfully! else debug in print to check if bypass :3", 10)
 
 return lib
