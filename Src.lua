@@ -262,6 +262,8 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
             	end
         	end)
     	end
+
+		
 	end
 	
 	do
@@ -1131,40 +1133,40 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 
 			return SliderData
 		end
-		
-		return Tab
-	end
 
-	Search:GetPropertyChangedSignal("Text"):Connect(function()
-		local search = Search.Text:lower()
+		Search:GetPropertyChangedSignal("Text"):Connect(function()
+			local search = Search.Text:lower()
 
-		for _, tab in ipairs(TabFrame:GetChildren()) do
-			if tab:IsA("ScrollingFrame") or tab:IsA("Frame") then
-				for _, control in ipairs(tab:GetChildren()) do
-					local found = search == ""
+			for _, tab in ipairs(TabFrame:GetChildren()) do
+				if tab:IsA("ScrollingFrame") or tab:IsA("Frame") then
+					for _, control in ipairs(tab:GetChildren()) do
+						local found = search == ""
 
-					if not found then
-						for _, obj in ipairs(control:GetDescendants()) do
-							if obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("Frame") then
-								if string.find(obj.Text:lower(), search, 1, true) then
-									found = true
-									break
-								end
-							elseif obj:IsA("TextBox") then
-								if string.find(obj.Text:lower(), search, 1, true)
-									or string.find(obj.PlaceholderText:lower(), search, 1, true) then
-									found = true
-									break
+						if not found then
+							for _, obj in ipairs(control:GetDescendants()) do
+								if obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("Frame") then
+									if string.find(obj.Text:lower(), search, 1, true) then
+										found = true
+										break
+									end
+								elseif obj:IsA("TextBox") then
+									if string.find(obj.Text:lower(), search, 1, true)
+										or string.find(obj.PlaceholderText:lower(), search, 1, true) then
+										found = true
+										break
+									end
 								end
 							end
 						end
-					end
 
-					control.Visible = found
+						control.Visible = found
+					end
 				end
 			end
-		end
-	end)
+		end)
+		
+		return Tab
+	end
 	
 	return GUI
 end
