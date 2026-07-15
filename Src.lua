@@ -225,6 +225,10 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		Close.Image = "rbxassetid://10734896206"
 		Close.ImageColor3 = Color3.fromRGB(140, 140, 140)
 
+		Close.MouseButton1Click:Connect(function()
+			Preview:Destory
+		end)
+
 		Exit.Name = "Exit"
 		Exit.Parent = Topbar
 		Exit.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1130,6 +1134,37 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		
 		return Tab
 	end
+
+	Search:GetPropertyChangedSignal("Text"):Connect(function()
+		local search = Search.Text:lower()
+
+		for _, tab in ipairs(TabFrame:GetChildren()) do
+			if tab:IsA("ScrollingFrame") or tab:IsA("Frame") then
+				for _, control in ipairs(tab:GetChildren()) do
+					local found = search == ""
+
+					if not found then
+						for _, obj in ipairs(control:GetDescendants()) do
+							if obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("Frame") then
+								if string.find(obj.Text:lower(), search, 1, true) then
+									found = true
+									break
+								end
+							elseif obj:IsA("TextBox") then
+								if string.find(obj.Text:lower(), search, 1, true)
+									or string.find(obj.PlaceholderText:lower(), search, 1, true) then
+									found = true
+									break
+								end
+							end
+						end
+					end
+
+					control.Visible = found
+				end
+			end
+		end
+	end)
 	
 	return GUI
 end
