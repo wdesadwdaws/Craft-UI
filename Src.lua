@@ -65,7 +65,7 @@ local function MakeDraggable(frame)
         end
     end)
 
-    UserInputService.InputChanged:Connect(function(input)
+    uis.InputChanged:Connect(function(input)
         if dragging and input == dragInput then
             update(input)
         end
