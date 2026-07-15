@@ -659,7 +659,7 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 			Text.Size = UDim2.new(1, 0, 1, 0)
 			Text.Position = UDim2.new(0, 0, 0, 0)
 			Text.Font = Enum.Font.Ubuntu
-			Text.Text = "Dropdown"
+			Text.Text = text;
 			Text.TextColor3 = lib.Theme.TextOff
 			Text.TextScaled = true
 			Text.TextSize = 14.000
