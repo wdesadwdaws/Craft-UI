@@ -846,7 +846,7 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 				
 				Option.MouseButton1Click:Connect(function(input, gpe)
 					if gpe then return end
-					
+
 					if DropdownData.Selected[id] then
 						DropdownData.Selected[id] = nil
 						lib:tween(Icon_5, {ImageTransparency = 1})
@@ -855,11 +855,11 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 						lib:tween(Icon_5, {ImageTransparency = 0})
 					end
 
-					if callback then
-						callback(table.clone(DropdownData.Selected))
-					end
-
 					DropdownData.Open = false
+
+					if callback then
+						callback(table.clone(DropdownData.Selected), id, value)
+					end
 				end)
 				
 				Items.CanvasSize = UDim2.fromOffset(0, UIListLayout_3.AbsoluteContentSize.Y)
