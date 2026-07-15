@@ -665,6 +665,14 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 				end
 			end)
 
+			Toggle.MouseButton1Down:Connect(function()
+				ToggleData.Mousedown = true
+			end)
+
+			Toggle.MouseButton1Up:Connect(function()
+				ToggleData.Mousedown = false
+			end)
+
 			
 			return ToggleData
 		end
@@ -852,11 +860,6 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 					end
 
 					DropdownData.Open = false
-
-
-					if callback then
-						callback(id, value)
-					end
 				end)
 				
 				Items.CanvasSize = UDim2.fromOffset(0, UIListLayout_3.AbsoluteContentSize.Y)
@@ -903,6 +906,9 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 
 			
 			function DropdownData:Remove(id)
+				DropdownData.Options[id] = nil
+				DropdownData.Selected[id] = nil
+
 				local Option = Items:FindFirstChild(id)
 
 				if Option then
@@ -913,6 +919,9 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 			end
 			
 			function DropdownData:Clear()
+				table.clear(DropdownData.Options)
+				table.clear(DropdownData.Selected)
+
 				for _, v in ipairs(Items:GetChildren()) do
 					if v:IsA("TextButton") then
 						v:Destroy()
@@ -958,8 +967,8 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 				end
 			end
 			
-			function DropdownData:Setcallback()
-				
+			function DropdownData:SetCallback(newCallback)
+				callback = newCallback
 			end
 			
 			if options then
@@ -1068,7 +1077,11 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 			
 			local Dragging = false
 			local CurrentValue = math.clamp(default or min, min, max)
-			local Percent = (CurrentValue - min) / (max - min)
+			local Percent = 0
+
+			if max ~= min then
+				Percent = (CurrentValue - min) / (max - min)
+			end
 
 			Draggable.Size = UDim2.new(Percent, 0, 1, 0)
 			Value.Text = tostring(CurrentValue)
