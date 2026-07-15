@@ -226,7 +226,7 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		Close.ImageColor3 = Color3.fromRGB(140, 140, 140)
 
 		Close.MouseButton1Click:Connect(function()
-			Preview:Destory
+			Preview:Destroy()
 		end)
 
 		Exit.Name = "Exit"
