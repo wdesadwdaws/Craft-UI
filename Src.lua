@@ -559,6 +559,7 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		function Tab:Toggle(text, callback)
 			local ToggleData = {
 				Hover = false,
+				Mousedown = false,
 				State = false
 			}
 			
