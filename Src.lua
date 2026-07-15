@@ -1136,6 +1136,39 @@ function lib:new(name: string, draggable: boolean, keybind: Enum.KeyCode?, theme
 		
 		return Tab
 	end
+
+	Search:GetPropertyChangedSignal("Text"):Connect(function()
+        local search = Search.Text:lower()
+
+        for _, tab in ipairs(Tabs:GetChildren()) do
+            if tab:IsA("ScrollingFrame") then
+                for _, control in ipairs(tab:GetChildren()) do
+                    if control:IsA("GuiObject") then
+                        local visible = search == ""
+
+                        if not visible then
+                            for _, obj in ipairs(control:GetDescendants()) do
+                                if obj:IsA("TextLabel") or obj:IsA("TextButton") then
+                                    if string.find(obj.Text:lower(), search, 1, true) then
+                                        visible = true
+                                        break
+                                    end
+                                elseif obj:IsA("TextBox") then
+                                    if string.find(obj.Text:lower(), search, 1, true)
+                                    or string.find(obj.PlaceholderText:lower(), search, 1, true) then
+                                        visible = true
+                                        break
+                                    end
+                                end
+                            end
+                        end
+
+                        control.Visible = visible
+                    end
+                end
+            end
+        end
+    end)
 	
 	return GUI
 end
