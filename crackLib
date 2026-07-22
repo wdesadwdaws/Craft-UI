@@ -146,6 +146,34 @@ local CrackedLib = {
 	}
 }
 
+writefile = writefile or nil
+readfile = readfile or nil
+isfile = isfile or nil
+
+CrackedLib.Config = {
+	FileName = "DandyConfig.json",
+	Data = {}
+}
+
+local canSave = (writefile ~= nil and readfile ~= nil and isfile ~= nil)
+
+function CrackedLib.Config:Save()
+	if not canSave then return end
+	pcall(function()
+		writefile(self.FileName, game:GetService("HttpService"):JSONEncode(self.Data))
+	end)
+end
+
+function CrackedLib.Config:Load()
+	if not canSave then return end
+	pcall(function()
+		if isfile(self.FileName) then
+			self.Data = game:GetService("HttpService"):JSONDecode(readfile(self.FileName))
+		end
+	end)
+end
+
+CrackedLib.Config:Load()
 local function getService(name)
 	return game:GetService(name)
 end
@@ -1104,6 +1132,40 @@ function CrackedLib:Init(name, draggable, keybind, theme)
 				return DropdownData
 			end
 			
+			function SectionData:ConfigToggle(text, default, callback, key)
+				local cfgKey = key or text
+				local value = CrackedLib.Config.Data[cfgKey] ~= nil and CrackedLib.Config.Data[cfgKey] or default
+
+				local data = self:Toggle(text, value, function(state)
+					CrackedLib.Config.Data[cfgKey] = state
+					CrackedLib.Config:Save()
+					if callback then callback(state) end
+				end)
+				return data
+			end
+
+			function SectionData:ConfigSlider(text, min, max, default, callback, key)
+				local cfgKey = key or text
+				local value = CrackedLib.Config.Data[cfgKey] ~= nil and CrackedLib.Config.Data[cfgKey] or default
+
+				local data = self:Slider(text, min, max, value, function(val)
+					CrackedLib.Config.Data[cfgKey] = val
+					CrackedLib.Config:Save()
+					if callback then callback(val) end
+				end)
+				return data
+			end
+
+			function SectionData:ConfigDropdown(text, options, callback, MultiSelect, key)
+				local cfgKey = key or text
+				local data = self:Dropdown(text, options, function(val)
+					CrackedLib.Config.Data[cfgKey] = val
+					CrackedLib.Config:Save()
+					if callback then callback(val) end
+				end, MultiSelect)
+				return data
+			end
+			
 			return SectionData
 		end
 
@@ -1170,7 +1232,7 @@ if RunService:IsStudio() then
 
 	Section1:Label("1")
 
-	Section1:Toggle("1", true, function(v)
+	Section1:ConfigToggle("1", false, function(v)
 		print("Toggle1 state changed to:", v)
 	end)
 
