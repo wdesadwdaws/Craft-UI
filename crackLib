@@ -151,7 +151,7 @@ readfile = readfile or nil
 isfile = isfile or nil
 
 CrackedLib.Config = {
-	FileName = "DandyConfig.json",
+	FileName = "CrackedLib.json",
 	Data = {}
 }
 
@@ -174,6 +174,8 @@ function CrackedLib.Config:Load()
 end
 
 CrackedLib.Config:Load()
+
+
 local function getService(name)
 	return game:GetService(name)
 end
@@ -182,12 +184,226 @@ local UserInputService = getService("UserInputService")
 local Players = getService("Players")
 local RunService = getService("RunService")
 
-function CrackedLib:Init(name, draggable, keybind, theme)
+function CrackedLib:Init(name, draggable, keybind, theme, keysystem: {Enabled: boolean, Key: string, copyLink: string})
 	local GUI = {}
 	self.CurrentTheme = self.Theme[theme] or self.Theme.Default
 	local CurrentTheme = self.CurrentTheme
-
 	local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+	
+	if type(keysystem) == "table" and keysystem.Enabled then
+		local Key = keysystem.Key or "testing key"
+		local CopyLink = keysystem.copyLink or "testing"
+		
+		local KeyPassed = false
+		
+		local KeySystem = Instance.new("ScreenGui")
+		local Main = Instance.new("Frame")
+		local UICorner = Instance.new("UICorner")
+		local UIStroke = Instance.new("UIStroke")
+		local Text = Instance.new("TextLabel")
+		local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+		local KeyBox = Instance.new("TextBox")
+		local UICorner_2 = Instance.new("UICorner")
+		local UIStroke_2 = Instance.new("UIStroke")
+		local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+		local KeyLink = Instance.new("TextButton")
+		local UICorner_3 = Instance.new("UICorner")
+		local UIStroke_3 = Instance.new("UIStroke")
+		local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+		local LoadKey = Instance.new("TextButton")
+		local UICorner_4 = Instance.new("UICorner")
+		local UIStroke_4 = Instance.new("UIStroke")
+		local UITextSizeConstraint_4 = Instance.new("UITextSizeConstraint")
+		local Close = Instance.new("ImageButton")
+		local Notice = Instance.new("TextLabel")
+		local UITextSizeConstraint_5 = Instance.new("UITextSizeConstraint")
+
+		--Properties:
+
+		KeySystem.Name = "KeySystem"
+		KeySystem.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+		KeySystem.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+		Main.Name = "Main"
+		Main.Parent = KeySystem
+		Main.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+		Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		Main.BorderSizePixel = 0
+		Main.Position = UDim2.new(0.252508342, 0, 0.324598998, 0)
+		Main.Size = UDim2.new(0.49385488, 0, 0.35753426, 0)
+
+		UICorner.Parent = Main
+
+		UIStroke.Parent = Main
+		UIStroke.Color = Color3.fromRGB(82, 82, 82)
+		UIStroke.Transparency = 0.200
+		UIStroke.Thickness = 5.000
+		UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+		Text.Name = "Text"
+		Text.Parent = Main
+		Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Text.BackgroundTransparency = 1.000
+		Text.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		Text.BorderSizePixel = 0
+		Text.Position = UDim2.new(0.0245099124, 0, 0.065134041, 0)
+		Text.Size = UDim2.new(0.933333397, 0, 0.176628366, 0)
+		Text.Font = Enum.Font.SourceSans
+		Text.Text = "Cracked Hub Key"
+		Text.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Text.TextScaled = true
+		Text.TextSize = 14.000
+		Text.TextWrapped = true
+
+		UITextSizeConstraint.Parent = Text
+		UITextSizeConstraint.MaxTextSize = 46
+
+		KeyBox.Name = "KeyBox"
+		KeyBox.Parent = Main
+		KeyBox.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+		KeyBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		KeyBox.BorderSizePixel = 0
+		KeyBox.Position = UDim2.new(0.180995479, 0, 0.417624414, 0)
+		KeyBox.Size = UDim2.new(0.618476391, 0, 0.1421455, 0)
+		KeyBox.Font = Enum.Font.SourceSans
+		KeyBox.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+		KeyBox.PlaceholderText = "Enter Key: XXX-XXX"
+		KeyBox.Text = ""
+		KeyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+		KeyBox.TextScaled = true
+		KeyBox.TextSize = 14.000
+		KeyBox.TextWrapped = true
+
+		UICorner_2.Parent = KeyBox
+
+		UIStroke_2.Parent = KeyBox
+		UIStroke_2.Color = Color3.fromRGB(102, 102, 102)
+		UIStroke_2.Transparency = 0.200
+		UIStroke_2.Thickness = 3.000
+		UIStroke_2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+		UITextSizeConstraint_2.Parent = KeyBox
+		UITextSizeConstraint_2.MaxTextSize = 14
+
+		KeyLink.Name = "KeyLink"
+		KeyLink.Parent = Main
+		KeyLink.BackgroundColor3 = Color3.fromRGB(64, 64, 64)
+		KeyLink.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		KeyLink.BorderSizePixel = 0
+		KeyLink.Position = UDim2.new(0.045110371, 0, 0.659003854, 0)
+		KeyLink.Size = UDim2.new(0.254600346, 0, 0.19961682, 0)
+		KeyLink.Font = Enum.Font.SourceSans
+		KeyLink.Text = "Copy Key Link"
+		KeyLink.TextColor3 = Color3.fromRGB(255, 255, 255)
+		KeyLink.TextScaled = true
+		KeyLink.TextSize = 14.000
+		KeyLink.TextWrapped = true
+
+		UICorner_3.Parent = KeyLink
+
+		UIStroke_3.Parent = KeyLink
+		UIStroke_3.Color = Color3.fromRGB(102, 102, 102)
+		UIStroke_3.Transparency = 0.200
+		UIStroke_3.Thickness = 3.000
+		UIStroke_3.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+		UITextSizeConstraint_3.Parent = KeyLink
+		UITextSizeConstraint_3.MaxTextSize = 14
+
+		LoadKey.Name = "LoadKey"
+		LoadKey.Parent = Main
+		LoadKey.BackgroundColor3 = Color3.fromRGB(64, 64, 64)
+		LoadKey.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		LoadKey.BorderSizePixel = 0
+		LoadKey.Position = UDim2.new(0.700787902, 0, 0.659003854, 0)
+		LoadKey.Size = UDim2.new(0.254600346, 0, 0.19961682, 0)
+		LoadKey.Font = Enum.Font.SourceSans
+		LoadKey.Text = "Load Key"
+		LoadKey.TextColor3 = Color3.fromRGB(255, 255, 255)
+		LoadKey.TextScaled = true
+		LoadKey.TextSize = 14.000
+		LoadKey.TextWrapped = true
+
+		UICorner_4.Parent = LoadKey
+
+		UIStroke_4.Parent = LoadKey
+		UIStroke_4.Color = Color3.fromRGB(102, 102, 102)
+		UIStroke_4.Transparency = 0.200
+		UIStroke_4.Thickness = 3.000
+		UIStroke_4.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+		UITextSizeConstraint_4.Parent = LoadKey
+		UITextSizeConstraint_4.MaxTextSize = 14
+
+		Close.Name = "Close"
+		Close.Parent = Main
+		Close.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Close.BackgroundTransparency = 1.000
+		Close.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		Close.BorderSizePixel = 0
+		Close.Position = UDim2.new(0.879154325, 0, 0.0609502532, 0)
+		Close.Size = UDim2.new(0.0776343867, 0, 0.134572089, 0)
+		Close.Image = "rbxassetid://10747384394"
+
+		Notice.Name = "Notice"
+		Notice.Parent = Main
+		Notice.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Notice.BackgroundTransparency = 1.000
+		Notice.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		Notice.BorderSizePixel = 0
+		Notice.Position = UDim2.new(0.292024434, 0, 0.663679421, 0)
+		Notice.Size = UDim2.new(0.412991494, 0, 0.182985812, 0)
+		Notice.Font = Enum.Font.SourceSans
+		Notice.Text = "Fast Keys!"
+		Notice.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Notice.TextScaled = true
+		Notice.TextSize = 14.000
+		Notice.TextWrapped = true
+
+		UITextSizeConstraint_5.Parent = Notice
+		UITextSizeConstraint_5.MaxTextSize = 14
+		
+		local function CheckKey()
+			local entered = KeyBox.Text:gsub("%s+", "")
+			if entered == Key then
+				Notice.Text = "Correct!"
+				Notice.TextColor3 = Color3.fromRGB(100, 255, 100)
+				task.wait(0.45)
+				KeyPassed = true
+				KeySystem:Destroy()
+			else
+				Notice.Text = "Wrong Key!"
+				Notice.TextColor3 = Color3.fromRGB(255, 80, 80)
+				KeyBox.Text = ""
+			end
+		end
+		
+		LoadKey.MouseButton1Click:Connect(CheckKey)
+		
+		KeyBox.FocusLost:Connect(function(enterPressed)
+			if enterPressed then
+				CheckKey()
+			end
+		end)
+		
+		KeyLink.MouseButton1Click:Connect(function()
+			if CopyLink and CopyLink ~= "" then
+				setclipboard(CopyLink)
+				Notice.Text = "Link Copied!"
+				Notice.TextColor3 = Color3.fromRGB(100, 200, 255)
+			else
+				Notice.Text = "No Link Set"
+				Notice.TextColor3 = Color3.fromRGB(255, 150, 80)
+			end
+		end)
+		
+		Close.MouseButton1Click:Connect(function()
+			KeySystem:Destroy()
+		end)
+		
+		repeat task.wait() until KeyPassed
+	end
+	
 	local CrackLib = Instance.new("ScreenGui")
 	CrackLib.Name = "CrackLib"
 	CrackLib.Parent = PlayerGui
@@ -358,7 +574,7 @@ function CrackedLib:Init(name, draggable, keybind, theme)
 		Tab_2.BorderSizePixel = 0
 		Tab_2.Position = UDim2.new(-1.7300224e-06, 0, 3.88701238e-07, 0)
 		Tab_2.Size = UDim2.new(1.0000006, 0, 1.00000048, 0)
-		
+
 		local Section = Instance.new("Frame")
 		Section.Name = "Section"
 		Section.Parent = Tab_2
@@ -571,7 +787,7 @@ function CrackedLib:Init(name, draggable, keybind, theme)
 
 				return ButtonData
 			end
-			
+
 			function SectionData:Label(text)
 				local LabelData = {}
 
@@ -624,7 +840,7 @@ function CrackedLib:Init(name, draggable, keybind, theme)
 
 				return LabelData
 			end
-			
+
 			function SectionData:Toggle(text, state, callback)
 				local ToggleData = {}
 				ToggleData.State = state or false
@@ -757,7 +973,7 @@ function CrackedLib:Init(name, draggable, keybind, theme)
 
 				return ToggleData
 			end
-			
+
 			function SectionData:Slider(text, min, max, default, callback)
 				local SliderData = {}
 
@@ -926,7 +1142,7 @@ function CrackedLib:Init(name, draggable, keybind, theme)
 
 				return SliderData
 			end
-			
+
 			function SectionData:Dropdown(text, options, callback, MultiSelect)
 				local DropdownData = {}
 				DropdownData.Open = false
@@ -1131,7 +1347,7 @@ function CrackedLib:Init(name, draggable, keybind, theme)
 
 				return DropdownData
 			end
-			
+
 			function SectionData:ConfigToggle(text, default, callback, key)
 				local cfgKey = key or text
 				local value = CrackedLib.Config.Data[cfgKey] ~= nil and CrackedLib.Config.Data[cfgKey] or default
@@ -1165,7 +1381,7 @@ function CrackedLib:Init(name, draggable, keybind, theme)
 				end, MultiSelect)
 				return data
 			end
-			
+
 			return SectionData
 		end
 
@@ -1216,7 +1432,7 @@ function CrackedLib:Init(name, draggable, keybind, theme)
 end
 
 if RunService:IsStudio() then
-	local lib = CrackedLib:Init("CrackLib", true, Enum.KeyCode.RightShift, "Default")
+	local lib = CrackedLib:Init("CrackLib", true, Enum.KeyCode.RightShift, "Default", true)
 
 	local Tab1 = lib:CreateTab("tab1")
 	local Tab2 = lib:CreateTab("tab2")
@@ -1293,7 +1509,7 @@ if RunService:IsStudio() then
 	Section4:Toggle("4", true, function(v)
 		print("Toggle4 state changed to:", v)
 	end)
-
+	
 	Section4:Slider("Volume", 0, 100, 50, function(v)
 		print("Volume:", v)
 	end)
