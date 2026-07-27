@@ -1389,24 +1389,35 @@ function CrackedLib:Init(name, draggable, keybind, theme, keysystem: {Enabled: b
 	end
 
 	if draggable then
+		local UserInputService = game:GetService("UserInputService")
+	
 		local Dragging = false
 		local DragStart, StartPos
+
 		DropShadowHolder.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if input.UserInputType == Enum.UserInputType.MouseButton1 
+			or input.UserInputType == Enum.UserInputType.Touch then
 				Dragging = true
 				DragStart = input.Position
 				StartPos = Main.Position
-				input.Changed:Connect(function()
-					if input.UserInputState == Enum.UserInputState.End then
-						Dragging = false
-					end
-				end)
 			end
 		end)
+
+		DropShadowHolder.InputEnded:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 
+			or input.UserInputType == Enum.UserInputType.Touch then
+				Dragging = false
+			end
+		end)
+
 		UserInputService.InputChanged:Connect(function(input)
-			if Dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+			if Dragging and (input.UserInputType == Enum.UserInputType.MouseMovement 
+			or input.UserInputType == Enum.UserInputType.Touch) then
 				local Delta = input.Position - DragStart
-				Main.Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + Delta.X, StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y)
+				Main.Position = UDim2.new(
+					StartPos.X.Scale, StartPos.X.Offset + Delta.X,
+					StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y
+				)
 			end
 		end)
 	end
